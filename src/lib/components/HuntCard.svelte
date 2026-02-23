@@ -11,14 +11,26 @@
 	let abandoning = false;
 	let isAlpha = false;
 
-	$: elapsedMinutes = Math.round(
-		(Date.now() - new Date(hunt.startedAt).getTime()) / 60000
-	);
+	// Tick every minute so elapsed time + enc/hr stay fresh
+	let now = Date.now();
+	const ticker = setInterval(() => { now = Date.now(); }, 60_000);
+	import { onDestroy } from 'svelte';
+	onDestroy(() => clearInterval(ticker));
+
+	$: elapsedMs = now - new Date(hunt.startedAt).getTime();
+	$: elapsedMinutes = Math.max(1, Math.round(elapsedMs / 60_000));
 
 	$: elapsedDisplay =
 		elapsedMinutes < 60
 			? `${elapsedMinutes}m`
 			: `${Math.floor(elapsedMinutes / 60)}h ${elapsedMinutes % 60}m`;
+
+	// Encounters per hour
+	$: encPerHour = Math.round((hunt.encounters / elapsedMinutes) * 60);
+	$: encPerHourDisplay =
+		encPerHour >= 1000
+			? `${(encPerHour / 1000).toFixed(1)}k/hr`
+			: `${encPerHour}/hr`;
 
 	async function onIncrement(delta: number) {
 		if (!hunt.id) return;
@@ -31,6 +43,8 @@
 		try {
 			await completeHunt(hunt, isAlpha);
 			dispatch('complete', hunt);
+		} catch {
+			// error toast already shown by store
 		} finally {
 			completing = false;
 		}
@@ -42,6 +56,8 @@
 		abandoning = true;
 		try {
 			await abandonHunt(hunt.id);
+		} catch {
+			// error toast already shown by store
 		} finally {
 			abandoning = false;
 		}
@@ -51,49 +67,68 @@
 <div class="card bg-base-100 border border-base-300 p-4 animate-fade-in">
 	<!-- Header row -->
 	<div class="flex items-center gap-3 mb-3">
-		<div class="relative">
-			<img
-				src={hunt.shinySpriteUrl}
-				alt={hunt.pokemonName}
-				width="56"
-				height="56"
-				class="shiny-glow"
-			/>
-		</div>
+		<img
+			src={hunt.shinySpriteUrl}
+			alt={hunt.pokemonName}
+			width="56"
+			height="56"
+			class="shiny-glow flex-shrink-0"
+		/>
 		<div class="flex-1 min-w-0">
 			<p class="font-bold text-base leading-tight truncate" style="color: #2D1B2E;">
 				{hunt.pokemonName}
 			</p>
 			<p class="text-xs opacity-60">{hunt.method}</p>
 		</div>
-		<div class="text-right text-xs opacity-50">
-			<p>{elapsedDisplay}</p>
+		<div class="text-right text-xs opacity-50 flex-shrink-0">
+			<p>⏱ {elapsedDisplay}</p>
 		</div>
 	</div>
 
-	<!-- Encounters counter -->
-	<div class="bg-base-200 rounded-xl p-3 mb-3 text-center">
-		<p class="text-xs font-medium opacity-60 mb-1">ENCOUNTERS</p>
-		<p class="text-3xl font-bold tabular-nums" style="color: #2D1B2E;">
-			{hunt.encounters.toLocaleString()}
-		</p>
+	<!-- Encounters + enc/hr -->
+	<div class="bg-base-200 rounded-xl p-3 mb-3">
+		<div class="flex items-end justify-between">
+			<div>
+				<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
+				<p class="text-3xl font-bold tabular-nums leading-none" style="color: #2D1B2E;">
+					{hunt.encounters.toLocaleString()}
+				</p>
+			</div>
+			{#if hunt.encounters > 0}
+				<div class="text-right">
+					<p class="text-xs font-medium opacity-60 mb-0.5">RATE</p>
+					<p class="text-lg font-bold tabular-nums leading-none" style="color: #2D1B2E;">
+						{encPerHourDisplay}
+					</p>
+				</div>
+			{/if}
+		</div>
 	</div>
 
-	<!-- +/- buttons -->
-	<div class="flex gap-2 mb-3">
+	<!-- +1 / +5 / +10 buttons -->
+	<div class="flex gap-1.5 mb-1.5">
 		<button
-			class="btn btn-outline btn-sm flex-1 font-mono"
+			class="btn btn-primary btn-sm flex-1 font-bold text-base"
+			on:click={() => onIncrement(1)}
+		>+1</button>
+		<button
+			class="btn btn-primary btn-sm flex-1 font-bold"
+			on:click={() => onIncrement(5)}
+		>+5</button>
+		<button
+			class="btn btn-primary btn-sm flex-1 font-bold"
+			on:click={() => onIncrement(10)}
+		>+10</button>
+	</div>
+
+	<!-- Undo misclick -->
+	<div class="flex justify-end mb-3">
+		<button
+			class="btn btn-ghost btn-xs text-xs opacity-50 hover:opacity-100"
 			on:click={() => onIncrement(-1)}
 			disabled={hunt.encounters === 0}
-			title="Undo (misclick)"
 		>
-			−1
-		</button>
-		<button
-			class="btn btn-primary btn-sm flex-[3] font-bold text-base"
-			on:click={() => onIncrement(1)}
-		>
-			+ Encounter
+			↩ undo misclick
 		</button>
 	</div>
 

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import '../app.css';
 	import Nav from '$lib/components/Nav.svelte';
+	import ToastContainer from '$lib/components/ToastContainer.svelte';
 	import { user, authLoading, signInWithGoogle } from '$lib/stores/auth';
 	import { subscribeHunts, unsubscribeHunts } from '$lib/stores/hunts';
 	import { subscribeShinies, unsubscribeShinies } from '$lib/stores/shinies';
@@ -28,6 +29,8 @@
 		unsubscribeShinies();
 	});
 </script>
+
+<ToastContainer />
 
 <div class="min-h-screen flex flex-col" style="background-color: #FFF8F0;">
 	{#if $authLoading}
