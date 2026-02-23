@@ -2,6 +2,7 @@
 	import { POKEMON, ALL_TYPES } from '$lib/data/pokemon';
 	import PokemonCard from '$lib/components/PokemonCard.svelte';
 	import StartHuntModal from '$lib/components/StartHuntModal.svelte';
+	import { EmptySearch } from '$lib/components/illustrations';
 	import { user } from '$lib/stores/auth';
 	import { startHunt } from '$lib/stores/hunts';
 	import { goto } from '$app/navigation';
@@ -66,7 +67,7 @@
 	</select>
 
 	<!-- Shiny toggle -->
-	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 bg-base-100 border border-base-300 rounded-lg">
+	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 bg-base-100 border border-base-300 rounded-lg hover:border-primary transition-colors">
 		<input type="checkbox" bind:checked={showShiny} class="checkbox checkbox-warning checkbox-sm" />
 		<span class="text-sm font-semibold">✨ Shiny View</span>
 	</label>
@@ -84,10 +85,11 @@
 
 <!-- Grid -->
 {#if filtered.length === 0}
-	<div class="text-center py-16 opacity-50">
-		<p class="text-5xl mb-3">🔍</p>
-		<p class="font-semibold">No Pokémon found</p>
-		<p class="text-sm">Try a different search or type filter</p>
+	<div class="flex flex-col items-center py-12">
+		<EmptySearch animate={true} />
+		<button class="btn btn-ghost btn-sm mt-4" on:click={() => { searchQuery = ''; selectedType = ''; }}>
+			Clear Filters
+		</button>
 	</div>
 {:else}
 	<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">

@@ -2,6 +2,7 @@
 	import { shinies, stats } from '$lib/stores/shinies';
 	import { hunts } from '$lib/stores/hunts';
 	import MethodChart from '$lib/components/MethodChart.svelte';
+	import { EmptyStats } from '$lib/components/illustrations';
 
 	function formatMinutes(min: number): string {
 		if (min < 60) return `${min}m`;
@@ -65,11 +66,9 @@
 </div>
 
 {#if $shinies.length === 0 && $hunts.length === 0}
-	<div class="text-center py-20">
-		<div class="text-6xl mb-4">📊</div>
-		<h2 class="text-xl font-bold mb-2" style="color: #2D1B2E;">No data yet</h2>
-		<p class="text-sm opacity-60 mb-6">Start hunting to see your statistics here!</p>
-		<a href="/pokedex" class="btn btn-primary font-bold">📖 Go to Pokédex</a>
+	<div class="flex flex-col items-center py-12">
+		<EmptyStats animate={true} />
+		<a href="/pokedex" class="btn btn-primary font-bold mt-4">📖 Go to Pokédex</a>
 	</div>
 {:else}
 	<!-- Overview stats -->
@@ -227,7 +226,7 @@
 			{/if}
 		</div>
 
-		<!-- Method breakdown list -->
+		<!-- Method breakdown -->
 		{#if methodBreakdown.length > 0}
 			<div class="card bg-base-100 border border-base-300 p-5 method-list-card">
 				<h3 class="font-bold mb-4" style="color: #2D1B2E;">Method Breakdown</h3>

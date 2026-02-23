@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { shinies, shiniesLoading } from '$lib/stores/shinies';
 	import ShinyCard from '$lib/components/ShinyCard.svelte';
+	import { EmptyShinies } from '$lib/components/illustrations';
 
 	let sortBy: 'date' | 'encounters' | 'name' = 'date';
 
@@ -62,11 +63,9 @@
 		<span class="loading loading-dots loading-lg" style="color: #FFB7C5;"></span>
 	</div>
 {:else if $shinies.length === 0}
-	<div class="text-center py-20">
-		<div class="text-6xl mb-4 animate-pulse">✨</div>
-		<h2 class="text-xl font-bold mb-2" style="color: #2D1B2E;">No shinies yet!</h2>
-		<p class="text-sm opacity-60 mb-6">Complete a hunt to add your first shiny to the gallery.</p>
-		<a href="/hunts" class="btn btn-primary font-bold">
+	<div class="flex flex-col items-center py-12">
+		<EmptyShinies animate={true} />
+		<a href="/hunts" class="btn btn-primary font-bold mt-4">
 			🎯 Go to Hunts
 		</a>
 	</div>

@@ -2,6 +2,7 @@
 	import { hunts, huntsLoading } from '$lib/stores/hunts';
 	import HuntCard from '$lib/components/HuntCard.svelte';
 	import Celebration from '$lib/components/Celebration.svelte';
+	import { EmptyHunts } from '$lib/components/illustrations';
 	import type { Hunt } from '$lib/types';
 
 	let celebrationHunt: Hunt | null = null;
@@ -25,11 +26,9 @@
 		<span class="loading loading-dots loading-lg" style="color: #FFB7C5;"></span>
 	</div>
 {:else if $hunts.length === 0}
-	<div class="text-center py-20">
-		<div class="text-6xl mb-4">🎯</div>
-		<h2 class="text-xl font-bold mb-2" style="color: #2D1B2E;">No active hunts</h2>
-		<p class="text-sm opacity-60 mb-6">Head to the Pokédex to start your first hunt!</p>
-		<a href="/pokedex" class="btn btn-primary font-bold">
+	<div class="flex flex-col items-center py-12">
+		<EmptyHunts animate={true} />
+		<a href="/pokedex" class="btn btn-primary font-bold mt-4">
 			📖 Go to Pokédex
 		</a>
 	</div>
