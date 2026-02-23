@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "canvas-confetti": "^1.9.2",
+    "chart.js": "^4.5.1",
     "firebase": "^10.7.0"
   },
   "type": "module"
