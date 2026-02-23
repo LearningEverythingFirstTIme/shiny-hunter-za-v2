@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	* {
+		box-sizing: border-box;
+	}
+
+	body {
+		font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+		background-color: #fff8f0;
+		color: #2d1b2e;
+		min-height: 100vh;
+	}
+
+	img {
+		image-rendering: pixelated;
+	}
+}
+
+@layer components {
+	.sprite-shadow {
+		filter: drop-shadow(0 0 8px rgba(255, 183, 197, 0.7));
+	}
+
+	.shiny-glow {
+		filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.95))
+			drop-shadow(0 0 6px rgba(255, 183, 197, 0.8));
+	}
+
+	.card-hover {
+		@apply transition-all duration-200 hover:-translate-y-1 hover:shadow-lg;
+	}
+
+	.type-badge {
+		@apply badge badge-sm font-semibold text-xs px-2 py-1 border-0;
+	}
+
+	.page-header {
+		@apply text-2xl font-bold mb-1;
+		color: #2d1b2e;
+	}
+
+	.page-subheader {
+		@apply text-sm mb-6 opacity-70;
+	}
+
+	.shimmer-bg {
+		background: linear-gradient(
+			90deg,
+			rgba(255, 183, 197, 0) 0%,
+			rgba(255, 183, 197, 0.4) 50%,
+			rgba(255, 183, 197, 0) 100%
+		);
+		background-size: 200% 100%;
+		animation: shimmer 2s linear infinite;
+	}
+}
+
+/* Type colors */
+.type-Normal { background-color: #A8A878; color: white; }
+.type-Fire { background-color: #F08030; color: white; }
+.type-Water { background-color: #6890F0; color: white; }
+.type-Grass { background-color: #78C850; color: white; }
+.type-Electric { background-color: #F8D030; color: #2D1B2E; }
+.type-Ice { background-color: #98D8D8; color: #2D1B2E; }
+.type-Fighting { background-color: #C03028; color: white; }
+.type-Poison { background-color: #A040A0; color: white; }
+.type-Ground { background-color: #E0C068; color: #2D1B2E; }
+.type-Flying { background-color: #A890F0; color: white; }
+.type-Psychic { background-color: #F85888; color: white; }
+.type-Bug { background-color: #A8B820; color: white; }
+.type-Rock { background-color: #B8A038; color: white; }
+.type-Ghost { background-color: #705898; color: white; }
+.type-Dragon { background-color: #7038F8; color: white; }
+.type-Dark { background-color: #705848; color: white; }
+.type-Steel { background-color: #B8B8D0; color: #2D1B2E; }
+.type-Fairy { background-color: #EE99AC; color: #2D1B2E; }
