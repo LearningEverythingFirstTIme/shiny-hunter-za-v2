@@ -48,6 +48,10 @@ export interface Hunt {
 	completedAt?: Date;
 	durationMinutes?: number;
 	isAlpha?: boolean;
+	isPaused?: boolean;
+	pausedAt?: Date;
+	totalPausedMinutes?: number;
+	notes?: string;
 }
 
 export interface Shiny {

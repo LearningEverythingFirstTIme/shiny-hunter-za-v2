@@ -31,7 +31,9 @@ export function subscribeHunts(userId: string) {
 							...d,
 							id: doc.id,
 							startedAt: d.startedAt?.toDate() ?? new Date(),
-							completedAt: d.completedAt?.toDate()
+							completedAt: d.completedAt?.toDate(),
+							pausedAt: d.pausedAt?.toDate() ?? undefined,
+							notes: d.notes ?? ''
 						} as Hunt;
 					});
 					hunts.set(data);
@@ -75,7 +77,10 @@ export async function startHunt(
 			method,
 			encounters: 0,
 			status: 'active',
-			startedAt: Timestamp.now()
+			startedAt: Timestamp.now(),
+			isPaused: false,
+			totalPausedMinutes: 0,
+			notes: ''
 		});
 
 		toast.success(`Started hunt for ${pokemonName}! Good luck! 🎯`);
@@ -147,4 +152,62 @@ export async function abandonHunt(huntId: string) {
 	}
 }
 
-export const activeHuntsCount = derived(hunts, ($hunts) => $hunts.length);
+export async function pauseHunt(huntId: string) {
+	try {
+		const { db } = await import('$lib/firebase');
+		const { doc, updateDoc } = await import('firebase/firestore');
+		await updateDoc(doc(db, 'hunts', huntId), { 
+			isPaused: true,
+			pausedAt: new Date()
+		});
+		toast.info('Hunt paused.');
+	} catch (err) {
+		console.error('pauseHunt error:', err);
+		toast.error("Couldn't pause hunt. Check your connection.");
+		throw err;
+	}
+}
+
+export async function resumeHunt(huntId: string, totalPausedMinutes: number = 0) {
+	try {
+		const { db } = await import('$lib/firebase');
+		const { doc, updateDoc } = await import('firebase/firestore');
+		await updateDoc(doc(db, 'hunts', huntId), { 
+			isPaused: false,
+			pausedAt: null,
+			totalPausedMinutes: totalPausedMinutes
+		});
+		toast.success('Hunt resumed! Good luck!');
+	} catch (err) {
+		console.error('resumeHunt error:', err);
+		toast.error("Couldn't resume hunt. Check your connection.");
+		throw err;
+	}
+}
+
+export async function updateHuntNotes(huntId: string, notes: string) {
+	try {
+		const { db } = await import('$lib/firebase');
+		const { doc, updateDoc } = await import('firebase/firestore');
+		await updateDoc(doc(db, 'hunts', huntId), { notes });
+	} catch (err) {
+		console.error('updateHuntNotes error:', err);
+		toast.error("Couldn't save notes. Check your connection.");
+		throw err;
+	}
+}
+
+export async function updateHuntMethod(huntId: string, method: HuntMethod) {
+	try {
+		const { db } = await import('$lib/firebase');
+		const { doc, updateDoc } = await import('firebase/firestore');
+		await updateDoc(doc(db, 'hunts', huntId), { method });
+		toast.success('Method updated!');
+	} catch (err) {
+		console.error('updateHuntMethod error:', err);
+		toast.error("Couldn't update method. Check your connection.");
+		throw err;
+	}
+}
+
+export const activeHuntsCount = derived(hunts, ($hunts) => $hunts.filter(h => !h.isPaused).length);

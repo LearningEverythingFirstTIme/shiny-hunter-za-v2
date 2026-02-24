@@ -1,7 +1,8 @@
 <script lang="ts">
 	import type { Hunt } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
-	import { updateEncounters, completeHunt, abandonHunt } from '$lib/stores/hunts';
+	import { updateEncounters, completeHunt, abandonHunt, resumeHunt, pauseHunt, updateHuntNotes, updateHuntMethod } from '$lib/stores/hunts';
+	import { HUNT_METHODS } from '$lib/data/pokemon';
 
 	export let hunt: Hunt;
 
@@ -11,7 +12,18 @@
 	let isHovered = false;
 	let completing = false;
 	let abandoning = false;
+	let pausing = false;
 	let isAlpha = false;
+	
+	let showNotes = false;
+	let notes = hunt.notes || '';
+	let savingNotes = false;
+	
+	let showMethodEdit = false;
+	let selectedMethod = hunt.method;
+	let savingMethod = false;
+	
+	let showBulkAdd = false;
 
 	// Tick every minute so elapsed time + enc/hr stay fresh
 	let now = Date.now();
@@ -19,7 +31,9 @@
 	import { onDestroy } from 'svelte';
 	onDestroy(() => clearInterval(ticker));
 
-	$: elapsedMs = now - new Date(hunt.startedAt).getTime();
+	$: elapsedMs = hunt.isPaused && hunt.pausedAt
+		? new Date(hunt.pausedAt).getTime() - new Date(hunt.startedAt).getTime() - (hunt.totalPausedMinutes || 0) * 60_000
+		: now - new Date(hunt.startedAt).getTime() - (hunt.totalPausedMinutes || 0) * 60_000;
 	$: elapsedMinutes = Math.max(1, Math.round(elapsedMs / 60_000));
 
 	$: elapsedDisplay =
@@ -66,6 +80,45 @@
 			// error toast already shown by store
 		} finally {
 			abandoning = false;
+		}
+	}
+
+	async function onPauseResume() {
+		if (!hunt.id || pausing) return;
+		pausing = true;
+		try {
+			if (hunt.isPaused && hunt.pausedAt) {
+				const additionalPausedMs = now - new Date(hunt.pausedAt).getTime();
+				const additionalPausedMinutes = Math.round(additionalPausedMs / 60_000);
+				const newTotalPaused = (hunt.totalPausedMinutes || 0) + additionalPausedMinutes;
+				await resumeHunt(hunt.id, newTotalPaused);
+			} else {
+				await pauseHunt(hunt.id);
+			}
+		} finally {
+			pausing = false;
+		}
+	}
+
+	async function onSaveNotes() {
+		if (!hunt.id || savingNotes) return;
+		savingNotes = true;
+		try {
+			await updateHuntNotes(hunt.id, notes);
+			showNotes = false;
+		} finally {
+			savingNotes = false;
+		}
+	}
+
+	async function onSaveMethod() {
+		if (!hunt.id || savingMethod || selectedMethod === hunt.method) return;
+		savingMethod = true;
+		try {
+			await updateHuntMethod(hunt.id, selectedMethod);
+			showMethodEdit = false;
+		} finally {
+			savingMethod = false;
 		}
 	}
 
@@ -135,10 +188,45 @@
 				style="color: #2D1B2E;">
 				{hunt.pokemonName}
 			</p>
-			<p class="text-xs opacity-60 method-text">{hunt.method}</p>
+			{#if showMethodEdit}
+				<select 
+					bind:value={selectedMethod} 
+					class="select select-bordered select-xs w-full mt-1"
+				>
+					{#each HUNT_METHODS as method}
+						<option value={method}>{method}</option>
+					{/each}
+				</select>
+				<div class="flex gap-1 mt-1">
+					<button 
+						class="btn btn-xs btn-primary"
+						on:click={onSaveMethod}
+						disabled={savingMethod || selectedMethod === hunt.method}
+					>
+						{savingMethod ? '...' : 'Save'}
+					</button>
+					<button 
+						class="btn btn-xs btn-ghost"
+						on:click={() => { showMethodEdit = false; selectedMethod = hunt.method; }}
+					>
+						Cancel
+					</button>
+				</div>
+			{:else}
+				<button 
+					class="text-xs opacity-60 hover:text-primary transition-colors text-left"
+					on:click={() => { showMethodEdit = true; selectedMethod = hunt.method; }}
+				>
+					{hunt.method} ✏️
+				</button>
+			{/if}
 		</div>
 		<div class="text-right text-xs opacity-50 flex-shrink-0 time-badge">
-			<p>⏱ {elapsedDisplay}</p>
+			{#if hunt.isPaused}
+				<span class="text-warning">⏸ Paused</span>
+			{:else}
+				<p>⏱ {elapsedDisplay}</p>
+			{/if}
 		</div>
 	</div>
 
@@ -162,13 +250,29 @@
 	<div class="bg-base-200 rounded-xl p-3 mb-3 encounter-box relative z-10 transition-all duration-300"
 		class:glow={isHovered}>
 		<div class="flex items-end justify-between">
-			<div>
-				<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
-				<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
-					class:scale={isHovered}
-					style="color: #2D1B2E;">
-					{hunt.encounters.toLocaleString()}
-				</p>
+			<div class="flex items-center gap-2">
+				<button
+					class="btn btn-circle btn-sm btn-error"
+					on:click={() => onIncrement(-1)}
+					disabled={hunt.encounters === 0 || hunt.isPaused}
+				>
+					-
+				</button>
+				<div>
+					<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
+					<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
+						class:scale={isHovered}
+						style="color: #2D1B2E;">
+						{hunt.encounters.toLocaleString()}
+					</p>
+				</div>
+				<button
+					class="btn btn-circle btn-sm btn-success"
+					on:click={() => onIncrement(1)}
+					disabled={hunt.isPaused}
+				>
+					+
+				</button>
 			</div>
 			{#if hunt.encounters > 0}
 				<div class="text-right">
@@ -182,31 +286,50 @@
 	</div>
 
 	<!-- +1 / +5 / +10 buttons -->
-	<div class="flex gap-1.5 mb-1.5 relative z-10">
+	<div class="flex gap-1.5 mb-1 relative z-10">
 		<button
 			class="btn btn-primary btn-sm flex-1 font-bold text-base increment-btn transition-all duration-200 hover:scale-105 active:scale-95"
 			on:click={() => onIncrement(1)}
+			disabled={hunt.isPaused}
 		>+1</button>
 		<button
 			class="btn btn-primary btn-sm flex-1 font-bold increment-btn transition-all duration-200 hover:scale-105 active:scale-95"
 			on:click={() => onIncrement(5)}
+			disabled={hunt.isPaused}
 		>+5</button>
 		<button
 			class="btn btn-primary btn-sm flex-1 font-bold increment-btn transition-all duration-200 hover:scale-105 active:scale-95"
 			on:click={() => onIncrement(10)}
+			disabled={hunt.isPaused}
 		>+10</button>
-	</div>
-
-	<!-- Undo misclick -->
-	<div class="flex justify-end mb-3 relative z-10">
 		<button
-			class="btn btn-ghost btn-xs text-xs opacity-50 hover:opacity-100 transition-all"
-			on:click={() => onIncrement(-1)}
-			disabled={hunt.encounters === 0}
+			class="btn btn-secondary btn-sm font-bold increment-btn transition-all duration-200"
+			on:click={() => { showBulkAdd = !showBulkAdd; }}
 		>
-			↩ undo misclick
+			{showBulkAdd ? '−' : '+'}
 		</button>
 	</div>
+
+	<!-- Bulk add buttons -->
+	{#if showBulkAdd}
+		<div class="flex gap-1.5 mb-3 relative z-10 animate-fade-in">
+			<button
+				class="btn btn-secondary btn-sm flex-1 font-bold"
+				on:click={() => onIncrement(50)}
+				disabled={hunt.isPaused}
+			>+50</button>
+			<button
+				class="btn btn-secondary btn-sm flex-1 font-bold"
+				on:click={() => onIncrement(100)}
+				disabled={hunt.isPaused}
+			>+100</button>
+			<button
+				class="btn btn-error btn-sm font-bold"
+				on:click={() => onIncrement(-10)}
+				disabled={hunt.encounters < 10 || hunt.isPaused}
+			>-10</button>
+		</div>
+	{/if}
 
 	<!-- Alpha toggle -->
 	<label class="flex items-center gap-2 text-sm mb-3 cursor-pointer select-none relative z-10 alpha-toggle"
@@ -218,6 +341,40 @@
 		{/if}
 	</label>
 
+	<!-- Notes section -->
+	{#if showNotes}
+		<div class="mb-3 relative z-10 animate-fade-in">
+			<textarea
+				bind:value={notes}
+				placeholder="Add notes about this hunt..."
+				class="textarea textarea-bordered w-full text-sm"
+				rows="2"
+			></textarea>
+			<div class="flex justify-end gap-1 mt-1">
+				<button 
+					class="btn btn-xs btn-primary"
+					on:click={onSaveNotes}
+					disabled={savingNotes}
+				>
+					{savingNotes ? '...' : 'Save Notes'}
+				</button>
+				<button 
+					class="btn btn-xs btn-ghost"
+					on:click={() => { showNotes = false; notes = hunt.notes || ''; }}
+				>
+					Cancel
+				</button>
+			</div>
+		</div>
+	{:else}
+		<button 
+			class="btn btn-ghost btn-xs w-full mb-3 relative z-10 opacity-50 hover:opacity-100 transition-all"
+			on:click={() => { showNotes = true; notes = hunt.notes || ''; }}
+		>
+			{hunt.notes ? '📝 Edit Notes' : '+ Add Notes'}
+		</button>
+	{/if}
+
 	<!-- Action row -->
 	<div class="flex gap-2 relative z-10">
 		<button
@@ -228,14 +385,27 @@
 			{abandoning ? '...' : 'Abandon'}
 		</button>
 		<button
-			class="btn btn-accent btn-sm flex-[2] font-bold shiny-found-btn transition-all duration-200 hover:scale-105"
+			class="btn btn-warning btn-sm flex-1 font-bold transition-all duration-200"
+			on:click={onPauseResume}
+			disabled={pausing}
+		>
+			{#if pausing}
+				<span class="loading loading-spinner loading-xs"></span>
+			{:else if hunt.isPaused}
+				▶ Resume
+			{:else}
+				⏸ Pause
+			{/if}
+		</button>
+		<button
+			class="btn btn-accent btn-sm flex-1 font-bold shiny-found-btn transition-all duration-200 hover:scale-105"
 			on:click={onComplete}
-			disabled={completing}
+			disabled={completing || hunt.isPaused}
 		>
 			{#if completing}
 				<span class="loading loading-spinner loading-xs"></span>
 			{:else}
-				✨ Shiny Found!
+				✨ Found!
 			{/if}
 		</button>
 	</div>
@@ -249,6 +419,15 @@
 	.hunt-card:hover {
 		box-shadow: 0 12px 32px rgba(255, 183, 197, 0.3), 0 4px 16px rgba(45, 27, 46, 0.1);
 		border-color: #FFB7C5;
+	}
+
+	@keyframes fadeIn {
+		from { opacity: 0; transform: translateY(-4px); }
+		to { opacity: 1; transform: translateY(0); }
+	}
+
+	.animate-fade-in {
+		animation: fadeIn 0.2s ease-out;
 	}
 
 	.hunt-glow {

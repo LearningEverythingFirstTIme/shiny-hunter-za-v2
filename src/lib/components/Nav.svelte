@@ -95,3 +95,20 @@
 		</div>
 	</div>
 </nav>
+
+<!-- Mobile Bottom Navigation -->
+<nav class="btm-nav btm-nav-md md:hidden bg-base-200 border-t border-base-300 sticky bottom-0 z-50">
+	{#each links as link}
+		<a
+			href={link.href}
+			class="transition-all"
+			class:active={$page.url.pathname.startsWith(link.href)}
+		>
+			<span class="btm-nav-label text-xs">{link.icon}</span>
+			<span class="btm-nav-label text-[10px] font-medium">{link.label}</span>
+			{#if link.href === '/hunts' && $activeHuntsCount > 0}
+				<span class="absolute -top-1 -right-1 badge badge-accent badge-xs">{$activeHuntsCount}</span>
+			{/if}
+		</a>
+	{/each}
+</nav>
