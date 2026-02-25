@@ -123,6 +123,8 @@
 	}
 
 	function handleMouseMove(e: MouseEvent) {
+		// Skip tilt effect on touch devices to prevent panel movement when clicking buttons
+		if (window.matchMedia('(pointer: coarse)').matches) return;
 		if (!cardElement) return;
 		
 		const rect = cardElement.getBoundingClientRect();
@@ -140,7 +142,10 @@
 
 	function handleMouseLeave() {
 		if (!cardElement) return;
-		cardElement.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+		// Only reset transform if not on touch device (touch devices don't have hover)
+		if (!window.matchMedia('(pointer: coarse)').matches) {
+			cardElement.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) translateY(0) scale(1)';
+		}
 		isHovered = false;
 	}
 
