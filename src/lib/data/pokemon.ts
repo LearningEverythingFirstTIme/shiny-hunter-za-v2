@@ -454,8 +454,6 @@ export const ALL_TYPES = [
 
 export const HUNT_METHODS = [
 	'Random Encounter',
-	'Mass Outbreak',
-	'Alpha Hunt',
-	'Dex Research',
-	'Roaming'
+	'Fast Travel',
+	'Bench Reset'
 ] as const;
