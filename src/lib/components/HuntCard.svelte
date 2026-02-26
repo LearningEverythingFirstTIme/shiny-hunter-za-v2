@@ -196,7 +196,7 @@
 				style="color: #2D1B2E;">
 				{hunt.pokemonName}
 				{#if pokemon?.evs}
-					<span class="text-xs text-white/50 ml-1">({formatEVs(pokemon.evs)})</span>
+					<span class="text-xs text-pink-400/80 ml-1 font-mono">{formatEVs(pokemon.evs)}</span>
 				{/if}
 			</p>
 			{#if showMethodEdit}
