@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Pokemon } from '$lib/types';
-	import { getSpriteUrl, getShinySpriteUrl } from '$lib/data/pokemon';
+	import { getSpriteUrl, getShinySpriteUrl, formatEVs } from '$lib/data/pokemon';
 	import { createEventDispatcher } from 'svelte';
 
 	export let pokemon: Pokemon;
@@ -96,11 +96,18 @@
 	</div>
 
 	<!-- Name -->
-	<p class="text-center font-semibold text-sm mb-2 truncate relative z-10 pokemon-name transition-all duration-300"
+	<p class="text-center font-semibold text-sm mb-1 truncate relative z-10 pokemon-name transition-all duration-300"
 		class:font-bold={isHovered}
 		style="color: #2D1B2E;">
 		{pokemon.name}
 	</p>
+	
+	<!-- EVs -->
+	{#if pokemon.evs}
+		<p class="text-center text-xs text-white/50 mb-2 relative z-10">
+			({formatEVs(pokemon.evs)})
+		</p>
+	{/if}
 
 	<!-- Types -->
 	<div class="flex justify-center gap-1 flex-wrap mb-3 relative z-10">

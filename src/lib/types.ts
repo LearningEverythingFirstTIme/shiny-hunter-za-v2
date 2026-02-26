@@ -3,6 +3,14 @@ export interface Pokemon {
 	nationalId: number; // National dex number (for sprite URLs)
 	name: string;
 	types: PokemonType[];
+	evs?: {
+		hp?: number;
+		attack?: number;
+		defense?: number;
+		specialAttack?: number;
+		specialDefense?: number;
+		speed?: number;
+	};
 }
 
 export type PokemonType =

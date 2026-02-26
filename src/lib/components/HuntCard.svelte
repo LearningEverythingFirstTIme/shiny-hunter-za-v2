@@ -2,7 +2,7 @@
 	import type { Hunt } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	import { updateEncounters, completeHunt, abandonHunt, resumeHunt, pauseHunt, updateHuntNotes, updateHuntMethod } from '$lib/stores/hunts';
-	import { HUNT_METHODS } from '$lib/data/pokemon';
+	import { HUNT_METHODS, POKEMON, formatEVs } from '$lib/data/pokemon';
 
 	export let hunt: Hunt;
 
@@ -51,6 +51,9 @@
 	// Progress towards odds (1/4096)
 	$: progressToOdds = Math.min(100, (hunt.encounters / 4096) * 100);
 	$: progressColor = progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#87CEEB' : '#FFB7C5';
+
+	// Find Pokemon to get EVs
+	$: pokemon = POKEMON.find(p => p.name === hunt.pokemonName);
 
 	async function onIncrement(delta: number) {
 		if (!hunt.id) return;
@@ -192,6 +195,9 @@
 				class:highlight={isHovered}
 				style="color: #2D1B2E;">
 				{hunt.pokemonName}
+				{#if pokemon?.evs}
+					<span class="text-xs text-white/50 ml-1">({formatEVs(pokemon.evs)})</span>
+				{/if}
 			</p>
 			{#if showMethodEdit}
 				<select 
