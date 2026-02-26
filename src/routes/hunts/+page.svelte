@@ -40,7 +40,7 @@
 		<a href="/pokedex" class="btn btn-ghost btn-sm">+ New Hunt</a>
 	</div>
 
-	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+	<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-4">
 		{#each $hunts as hunt (hunt.id)}
 			<HuntCard {hunt} on:complete={handleComplete} />
 		{/each}
