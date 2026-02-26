@@ -251,52 +251,52 @@
 		</div>
 	</div>
 
-	<!-- Encounters + enc/hr -->
+	<!-- Encounters display + adjustment -->
 	<div class="bg-base-200 rounded-xl p-3 mb-3 encounter-box relative z-10 transition-all duration-300"
 		class:glow={isHovered}>
-		<div class="flex items-end justify-between">
-			<div class="flex items-center gap-2">
+		<div class="flex items-center justify-between">
+			<!-- Left side: Encounters count -->
+			<div>
+				<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
+				<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
+					class:scale={isHovered}
+					style="color: #2D1B2E;">
+					{hunt.encounters.toLocaleString()}
+				</p>
+			</div>
+			<!-- Right side: -1 button (away from main + buttons) -->
+			<div class="flex items-center gap-3">
+				{#if hunt.encounters > 0}
+					<div class="text-right mr-2">
+						<p class="text-xs font-medium opacity-60 mb-0.5">RATE</p>
+						<p class="text-lg font-bold tabular-nums leading-none" style="color: #2D1B2E;">
+							{encPerHourDisplay}
+						</p>
+					</div>
+				{/if}
 				<button
 					class="btn btn-circle btn-sm btn-error"
 					on:click={() => onIncrement(-1)}
 					disabled={hunt.encounters === 0 || hunt.isPaused}
+					aria-label="Decrease encounters"
 				>
-					-
-				</button>
-				<div>
-					<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
-					<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
-						class:scale={isHovered}
-						style="color: #2D1B2E;">
-						{hunt.encounters.toLocaleString()}
-					</p>
-				</div>
-				<button
-					class="btn btn-circle btn-sm btn-success"
-					on:click={() => onIncrement(1)}
-					disabled={hunt.isPaused}
-				>
-					+
+					−
 				</button>
 			</div>
-			{#if hunt.encounters > 0}
-				<div class="text-right">
-					<p class="text-xs font-medium opacity-60 mb-0.5">RATE</p>
-					<p class="text-lg font-bold tabular-nums leading-none" style="color: #2D1B2E;">
-						{encPerHourDisplay}
-					</p>
-				</div>
-			{/if}
 		</div>
 	</div>
 
-	<!-- +1 / +5 / +10 buttons -->
+	<!-- Primary +1 button (full width, prominent) -->
+	<button
+		class="btn btn-primary btn-lg w-full font-bold text-lg increment-btn mb-2 transition-all duration-200 hover:scale-[1.02] active:scale-95 shadow-lg"
+		on:click={() => onIncrement(1)}
+		disabled={hunt.isPaused}
+	>
+		+1 Encounter
+	</button>
+
+	<!-- Secondary increment buttons (+5, +10, bulk toggle) -->
 	<div class="flex gap-1.5 mb-1 relative z-10">
-		<button
-			class="btn btn-primary btn-sm flex-1 font-bold text-base increment-btn transition-all duration-200 hover:scale-105 active:scale-95"
-			on:click={() => onIncrement(1)}
-			disabled={hunt.isPaused}
-		>+1</button>
 		<button
 			class="btn btn-primary btn-sm flex-1 font-bold increment-btn transition-all duration-200 hover:scale-105 active:scale-95"
 			on:click={() => onIncrement(5)}
@@ -311,7 +311,7 @@
 			class="btn btn-secondary btn-sm font-bold increment-btn transition-all duration-200"
 			on:click={() => { showBulkAdd = !showBulkAdd; }}
 		>
-			{showBulkAdd ? '−' : '+'}
+			{showBulkAdd ? '−' : '⋯'}
 		</button>
 	</div>
 
