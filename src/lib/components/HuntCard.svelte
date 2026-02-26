@@ -425,6 +425,13 @@
 <style>
 	.hunt-card {
 		box-shadow: 0 2px 8px rgba(45, 27, 46, 0.08);
+		min-height: 220px;
+	}
+
+	@media (min-width: 1024px) {
+		.hunt-card {
+			min-height: 240px;
+		}
 	}
 
 	.hunt-card:hover {
