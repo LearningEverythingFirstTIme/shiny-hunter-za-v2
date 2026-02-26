@@ -191,12 +191,12 @@
 			/>
 		</div>
 		<div class="flex-1 min-w-0">
-			<p class="font-bold text-base leading-tight truncate pokemon-name transition-all duration-300"
+			<p class="font-bold text-base leading-tight pokemon-name transition-all duration-300"
 				class:highlight={isHovered}
 				style="color: #2D1B2E;">
 				{hunt.pokemonName}
 				{#if pokemon?.evs}
-					<span class="text-xs text-pink-400/80 ml-1 font-mono">{formatEVs(pokemon.evs)}</span>
+					<span class="text-xs text-pink-400/80 ml-1 font-mono block">{formatEVs(pokemon.evs)}</span>
 				{/if}
 			</p>
 			{#if showMethodEdit}
