@@ -254,6 +254,196 @@ export const POKEMON: Pokemon[] = [
 	{ id: 230, nationalId: 718, name: 'Zygarde',      types: ['Dragon', 'Ground'] },
 	{ id: 231, nationalId: 719, name: 'Diancie',      types: ['Rock', 'Fairy'] },
 	{ id: 232, nationalId: 150, name: 'Mewtwo',       types: ['Psychic'] },
+
+	// ── Hyperspace Pokédex ──────────────────────────────────────────────────
+	// Hoenn Starters
+	{ id: 233, nationalId: 252, name: 'Treecko',      types: ['Grass'] },
+	{ id: 234, nationalId: 253, name: 'Grovyle',      types: ['Grass'] },
+	{ id: 235, nationalId: 254, name: 'Sceptile',     types: ['Grass'] },
+	{ id: 236, nationalId: 255, name: 'Torchic',      types: ['Fire'] },
+	{ id: 237, nationalId: 256, name: 'Combusken',    types: ['Fire', 'Fighting'] },
+	{ id: 238, nationalId: 257, name: 'Blaziken',     types: ['Fire', 'Fighting'] },
+	{ id: 239, nationalId: 258, name: 'Mudkip',       types: ['Water'] },
+	{ id: 240, nationalId: 259, name: 'Marshtomp',    types: ['Water', 'Ground'] },
+	{ id: 241, nationalId: 260, name: 'Swampert',     types: ['Water', 'Ground'] },
+	// Weather Trio
+	{ id: 242, nationalId: 382, name: 'Kyogre',       types: ['Water'] },
+	{ id: 243, nationalId: 383, name: 'Groudon',      types: ['Ground'] },
+	{ id: 244, nationalId: 384, name: 'Rayquaza',     types: ['Dragon', 'Flying'] },
+	// Eon Duo
+	{ id: 245, nationalId: 380, name: 'Latias',       types: ['Dragon', 'Psychic'] },
+	{ id: 246, nationalId: 381, name: 'Latios',       types: ['Dragon', 'Psychic'] },
+	// Swords of Justice
+	{ id: 247, nationalId: 638, name: 'Cobalion',     types: ['Steel', 'Fighting'] },
+	{ id: 248, nationalId: 639, name: 'Terrakion',    types: ['Rock', 'Fighting'] },
+	{ id: 249, nationalId: 640, name: 'Virizion',     types: ['Grass', 'Fighting'] },
+	{ id: 250, nationalId: 647, name: 'Keldeo',       types: ['Water', 'Fighting'] },
+	// Mythicals
+	{ id: 251, nationalId: 485, name: 'Heatran',      types: ['Fire', 'Steel'] },
+	{ id: 252, nationalId: 649, name: 'Genesect',     types: ['Bug', 'Steel'] },
+	{ id: 253, nationalId: 648, name: 'Meloetta',     types: ['Normal', 'Psychic'] },
+	{ id: 254, nationalId: 721, name: 'Volcanion',    types: ['Fire', 'Water'] },
+	{ id: 255, nationalId: 802, name: 'Marshadow',    types: ['Fighting', 'Ghost'] },
+	{ id: 256, nationalId: 807, name: 'Zeraora',      types: ['Electric'] },
+	{ id: 257, nationalId: 720, name: 'Hoopa',        types: ['Psychic', 'Ghost'] },
+	{ id: 258, nationalId: 491, name: 'Darkrai',      types: ['Dark'] },
+	// Magearna Line
+	{ id: 259, nationalId: 808, name: 'Meltan',       types: ['Steel'] },
+	{ id: 260, nationalId: 809, name: 'Melmetal',     types: ['Steel'] },
+	{ id: 261, nationalId: 801, name: 'Magearna',     types: ['Steel', 'Fairy'] },
+	// Zubat Line
+	{ id: 262, nationalId: 41,  name: 'Zubat',        types: ['Poison', 'Flying'] },
+	{ id: 263, nationalId: 42,  name: 'Golbat',       types: ['Poison', 'Flying'] },
+	{ id: 264, nationalId: 169, name: 'Crobat',       types: ['Poison', 'Flying'] },
+	// Meowth Line
+	{ id: 265, nationalId: 52,  name: 'Meowth',       types: ['Normal'] },
+	{ id: 266, nationalId: 53,  name: 'Persian',      types: ['Normal'] },
+	{ id: 267, nationalId: 863, name: 'Perrserker',   types: ['Steel'] },
+	// Igglybuff Line
+	{ id: 268, nationalId: 174, name: 'Igglybuff',    types: ['Normal', 'Fairy'] },
+	{ id: 269, nationalId: 39,  name: 'Jigglypuff',   types: ['Normal', 'Fairy'] },
+	{ id: 270, nationalId: 40,  name: 'Wigglytuff',   types: ['Normal', 'Fairy'] },
+	// Mankey Line
+	{ id: 271, nationalId: 56,  name: 'Mankey',       types: ['Fighting'] },
+	{ id: 272, nationalId: 57,  name: 'Primeape',     types: ['Fighting'] },
+	{ id: 273, nationalId: 979, name: 'Annihilape',   types: ['Fighting', 'Ghost'] },
+	// Cubone Line
+	{ id: 274, nationalId: 104, name: 'Cubone',       types: ['Ground'] },
+	{ id: 275, nationalId: 105, name: 'Marowak',      types: ['Ground'] },
+	// Mime Line
+	{ id: 276, nationalId: 439, name: 'Mime Jr.',     types: ['Psychic', 'Fairy'] },
+	{ id: 277, nationalId: 122, name: 'Mr. Mime',     types: ['Psychic', 'Fairy'] },
+	{ id: 278, nationalId: 866, name: 'Mr. Rime',     types: ['Ice', 'Psychic'] },
+	// Chimecho Line
+	{ id: 279, nationalId: 433, name: 'Chingling',    types: ['Psychic'] },
+	{ id: 280, nationalId: 358, name: 'Chimecho',     types: ['Psychic'] },
+	// Spoink Line
+	{ id: 281, nationalId: 325, name: 'Spoink',       types: ['Psychic'] },
+	{ id: 282, nationalId: 326, name: 'Grumpig',      types: ['Psychic'] },
+	// Gulpin Line
+	{ id: 283, nationalId: 316, name: 'Gulpin',       types: ['Poison'] },
+	{ id: 284, nationalId: 317, name: 'Swalot',       types: ['Poison'] },
+	// Feebas Line
+	{ id: 285, nationalId: 349, name: 'Feebas',       types: ['Water'] },
+	{ id: 286, nationalId: 350, name: 'Milotic',      types: ['Water'] },
+	// Toxel Line
+	{ id: 287, nationalId: 848, name: 'Toxel',        types: ['Electric', 'Poison'] },
+	{ id: 288, nationalId: 849, name: 'Toxtricity',   types: ['Electric', 'Poison'] },
+	// Capsakid Line
+	{ id: 289, nationalId: 951, name: 'Capsakid',     types: ['Grass'] },
+	{ id: 290, nationalId: 952, name: 'Scovillain',   types: ['Grass', 'Fire'] },
+	// Charcadet Line
+	{ id: 291, nationalId: 935, name: 'Charcadet',    types: ['Fire'] },
+	{ id: 292, nationalId: 936, name: 'Armarouge',    types: ['Fire', 'Psychic'] },
+	{ id: 293, nationalId: 937, name: 'Ceruledge',    types: ['Fire', 'Ghost'] },
+	// Foongus Line
+	{ id: 294, nationalId: 590, name: 'Foongus',      types: ['Grass', 'Poison'] },
+	{ id: 295, nationalId: 591, name: 'Amoonguss',    types: ['Grass', 'Poison'] },
+	// Gimmighoul Line
+	{ id: 296, nationalId: 999, name: 'Gimmighoul',   types: ['Ghost'] },
+	{ id: 297, nationalId: 1000, name: 'Gholdengo',   types: ['Steel', 'Ghost'] },
+	// Nacli Line
+	{ id: 298, nationalId: 932, name: 'Nacli',        types: ['Rock'] },
+	{ id: 299, nationalId: 933, name: 'Naclstack',    types: ['Rock'] },
+	{ id: 300, nationalId: 934, name: 'Garganacl',    types: ['Rock'] },
+	// Glimmet Line
+	{ id: 301, nationalId: 969, name: 'Glimmet',      types: ['Rock', 'Poison'] },
+	{ id: 302, nationalId: 970, name: 'Glimmora',     types: ['Rock', 'Poison'] },
+	// Fidough Line
+	{ id: 303, nationalId: 926, name: 'Fidough',      types: ['Fairy'] },
+	{ id: 304, nationalId: 927, name: 'Dachsbun',     types: ['Fairy'] },
+	// Maschiff Line
+	{ id: 305, nationalId: 942, name: 'Maschiff',     types: ['Dark'] },
+	{ id: 306, nationalId: 943, name: 'Mabosstiff',   types: ['Dark'] },
+	// Greavard Line
+	{ id: 307, nationalId: 971, name: 'Greavard',     types: ['Ghost'] },
+	{ id: 308, nationalId: 972, name: 'Houndstone',   types: ['Ghost'] },
+	// Dondozo & Tatsugiri
+	{ id: 309, nationalId: 977, name: 'Dondozo',      types: ['Water'] },
+	{ id: 310, nationalId: 978, name: 'Tatsugiri',    types: ['Dragon', 'Water'] },
+	// Flamigo
+	{ id: 311, nationalId: 973, name: 'Flamigo',      types: ['Flying', 'Fighting'] },
+	// Frigibax Line
+	{ id: 312, nationalId: 996, name: 'Frigibax',     types: ['Dragon', 'Ice'] },
+	{ id: 313, nationalId: 997, name: 'Arctibax',     types: ['Dragon', 'Ice'] },
+	{ id: 314, nationalId: 998, name: 'Baxcalibur',   types: ['Dragon', 'Ice'] },
+	// Cyclizar
+	{ id: 315, nationalId: 967, name: 'Cyclizar',     types: ['Dragon', 'Normal'] },
+	// Shroodle Line
+	{ id: 316, nationalId: 944, name: 'Shroodle',     types: ['Poison', 'Normal'] },
+	{ id: 317, nationalId: 945, name: 'Grafaiai',     types: ['Poison', 'Normal'] },
+	// Clobbopus Line
+	{ id: 318, nationalId: 852, name: 'Clobbopus',    types: ['Fighting'] },
+	{ id: 319, nationalId: 853, name: 'Grapploct',    types: ['Fighting'] },
+	// Wimpod Line
+	{ id: 320, nationalId: 767, name: 'Wimpod',       types: ['Bug', 'Water'] },
+	{ id: 321, nationalId: 768, name: 'Golisopod',    types: ['Bug', 'Water'] },
+	// Sandygast Line
+	{ id: 322, nationalId: 769, name: 'Sandygast',    types: ['Ghost', 'Ground'] },
+	{ id: 323, nationalId: 770, name: 'Palossand',    types: ['Ghost', 'Ground'] },
+	// Yamask Line
+	{ id: 324, nationalId: 562, name: 'Yamask',       types: ['Ghost'] },
+	{ id: 325, nationalId: 563, name: 'Cofagrigus',   types: ['Ghost'] },
+	{ id: 326, nationalId: 867, name: 'Runerigus',    types: ['Ground', 'Ghost'] },
+	// Golett Line
+	{ id: 327, nationalId: 622, name: 'Golett',       types: ['Ground', 'Ghost'] },
+	{ id: 328, nationalId: 623, name: 'Golurk',       types: ['Ground', 'Ghost'] },
+	// Cryogonal
+	{ id: 329, nationalId: 615, name: 'Cryogonal',    types: ['Ice'] },
+	// Crabrawler Line
+	{ id: 330, nationalId: 739, name: 'Crabrawler',   types: ['Fighting'] },
+	{ id: 331, nationalId: 740, name: 'Crabominable', types: ['Fighting', 'Ice'] },
+	// Rookidee Line
+	{ id: 332, nationalId: 821, name: 'Rookidee',     types: ['Flying'] },
+	{ id: 333, nationalId: 822, name: 'Corvisquire',  types: ['Flying'] },
+	{ id: 334, nationalId: 823, name: 'Corviknight',  types: ['Flying', 'Steel'] },
+	// Farfetch'd Line
+	{ id: 335, nationalId: 83,  name: 'Farfetch\'d',  types: ['Normal', 'Flying'] },
+	{ id: 336, nationalId: 865, name: 'Sirfetch\'d',  types: ['Fighting'] },
+	// Starly Line
+	{ id: 337, nationalId: 396, name: 'Starly',       types: ['Normal', 'Flying'] },
+	{ id: 338, nationalId: 397, name: 'Staravia',     types: ['Normal', 'Flying'] },
+	{ id: 339, nationalId: 398, name: 'Staraptor',    types: ['Normal', 'Flying'] },
+	// Munna Line
+	{ id: 340, nationalId: 517, name: 'Munna',        types: ['Psychic'] },
+	{ id: 341, nationalId: 518, name: 'Musharna',     types: ['Psychic'] },
+	// Tinkatink Line
+	{ id: 342, nationalId: 957, name: 'Tinkatink',    types: ['Fairy', 'Steel'] },
+	{ id: 343, nationalId: 958, name: 'Tinkatuff',    types: ['Fairy', 'Steel'] },
+	{ id: 344, nationalId: 959, name: 'Tinkaton',     types: ['Fairy', 'Steel'] },
+	// Kecleon
+	{ id: 345, nationalId: 352, name: 'Kecleon',      types: ['Normal'] },
+	// Nickit Line
+	{ id: 346, nationalId: 827, name: 'Nickit',       types: ['Dark'] },
+	{ id: 347, nationalId: 828, name: 'Thievul',      types: ['Dark'] },
+	// Purrloin Line
+	{ id: 348, nationalId: 509, name: 'Purrloin',     types: ['Dark'] },
+	{ id: 349, nationalId: 510, name: 'Liepard',      types: ['Dark'] },
+	// Indeedee
+	{ id: 350, nationalId: 876, name: 'Indeedee',     types: ['Psychic', 'Normal'] },
+	// Morpeko
+	{ id: 351, nationalId: 877, name: 'Morpeko',      types: ['Electric', 'Dark'] },
+	// Zangoose & Seviper
+	{ id: 352, nationalId: 335, name: 'Zangoose',     types: ['Normal'] },
+	{ id: 353, nationalId: 336, name: 'Seviper',      types: ['Poison'] },
+	// Sawk & Throh
+	{ id: 354, nationalId: 539, name: 'Sawk',         types: ['Fighting'] },
+	{ id: 355, nationalId: 538, name: 'Throh',        types: ['Fighting'] },
+	// Qwilfish Line
+	{ id: 356, nationalId: 211, name: 'Qwilfish',     types: ['Water', 'Poison'] },
+	{ id: 357, nationalId: 904, name: 'Overqwil',     types: ['Dark', 'Poison'] },
+	// Porygon Line
+	{ id: 358, nationalId: 137, name: 'Porygon',      types: ['Normal'] },
+	{ id: 359, nationalId: 233, name: 'Porygon2',     types: ['Normal'] },
+	{ id: 360, nationalId: 474, name: 'Porygon-Z',    types: ['Normal'] },
+	// Rotom
+	{ id: 361, nationalId: 479, name: 'Rotom',        types: ['Electric', 'Ghost'] },
+	// Mimikyu
+	{ id: 362, nationalId: 778, name: 'Mimikyu',      types: ['Ghost', 'Fairy'] },
+	// Kleavor
+	{ id: 363, nationalId: 900, name: 'Kleavor',      types: ['Bug', 'Rock'] },
+	// Squawkabilly
+	{ id: 364, nationalId: 931, name: 'Squawkabilly', types: ['Normal', 'Flying'] },
 ];
 
 export const ALL_TYPES = [
