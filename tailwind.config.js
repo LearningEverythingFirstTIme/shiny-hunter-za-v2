@@ -18,6 +18,14 @@ export default {
 				'umbreon-gold': '#FFD700',
 				'umbreon-silver': '#C0C0C0',
 				'umbreon-moon': '#E8E8E8',
+
+				// Aegislash (Royal Dark) Theme Colors
+				'aegislash-purple': '#4A3B5C',
+				'aegislash-gold': '#F4E04D',
+				'aegislash-silver': '#A8A8A8',
+				'aegislash-red': '#C41E3A',
+				'aegislash-shadow': '#2D1F3F',
+				'aegislash-cream': '#F5F5DC',
 			},
 			animation: {
 				'flash-gold': 'flashGold 0.6s ease-out',
@@ -130,6 +138,31 @@ export default {
 					'warning-content': '#020B14',
 					error: '#FF3333',
 					'error-content': '#FFFFFF'
+				}
+			},
+			{
+				// Shiny Aegislash: regal ghostly knight's shield
+				aegislash: {
+					primary: '#F4E04D',
+					'primary-content': '#2D1F3F',
+					secondary: '#A8A8A8',
+					'secondary-content': '#2D1F3F',
+					accent: '#C41E3A',
+					'accent-content': '#F5F5DC',
+					neutral: '#4A3B5C',
+					'neutral-content': '#F5F5DC',
+					'base-100': '#2D1F3F',
+					'base-200': '#3D2F4F',
+					'base-300': '#4A3B5C',
+					'base-content': '#F5F5DC',
+					info: '#A8A8A8',
+					'info-content': '#2D1F3F',
+					success: '#22D45A',
+					'success-content': '#042514',
+					warning: '#F4E04D',
+					'warning-content': '#2D1F3F',
+					error: '#C41E3A',
+					'error-content': '#F5F5DC'
 				}
 			}
 		]

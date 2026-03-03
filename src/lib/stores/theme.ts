@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
-export type Theme = 'sylveon' | 'umbreon';
+export type Theme = 'sylveon' | 'umbreon' | 'aegislash';
 
 const STORAGE_KEY = 'shiny-hunter-theme';
 
@@ -18,6 +18,7 @@ function createThemeStore() {
 			// Respect saved preference; fall back to system dark-mode preference
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const theme: Theme = saved === 'umbreon' ? 'umbreon'
+				: saved === 'aegislash' ? 'aegislash'
 				: saved === 'sylveon' ? 'sylveon'
 				: prefersDark ? 'umbreon'
 				: 'sylveon';
@@ -25,16 +26,23 @@ function createThemeStore() {
 			set(theme);
 		},
 
-		/** Toggle between sylveon (light) and umbreon (dark). */
-		toggle() {
+		/** Cycle through themes: sylveon → umbreon → aegislash → sylveon */
+		cycle() {
 			update((current) => {
-				const next: Theme = current === 'sylveon' ? 'umbreon' : 'sylveon';
+				const order: Theme[] = ['sylveon', 'umbreon', 'aegislash'];
+				const currentIndex = order.indexOf(current);
+				const next = order[(currentIndex + 1) % order.length];
 				if (browser) {
 					localStorage.setItem(STORAGE_KEY, next);
 					document.documentElement.setAttribute('data-theme', next);
 				}
 				return next;
 			});
+		},
+
+		/** Toggle between sylveon (light) and umbreon (dark) - kept for backwards compatibility. */
+		toggle() {
+			this.cycle();
 		},
 
 		/** Directly set a theme. */
@@ -44,6 +52,13 @@ function createThemeStore() {
 				document.documentElement.setAttribute('data-theme', t);
 			}
 			set(t);
+		},
+
+		/** Get the next theme in the cycle without changing it. */
+		peekNext(current: Theme): Theme {
+			const order: Theme[] = ['sylveon', 'umbreon', 'aegislash'];
+			const currentIndex = order.indexOf(current);
+			return order[(currentIndex + 1) % order.length];
 		}
 	};
 }
