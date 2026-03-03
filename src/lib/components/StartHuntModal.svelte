@@ -12,9 +12,7 @@
 </script>
 
 <!-- Backdrop -->
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true"
-	class:bg-black={$theme === 'sylveon'}
-	class:bg-black={$theme === 'umbreon'}>
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black" role="dialog" aria-modal="true">
 	<button
 		class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
 		on:click={() => dispatch('close')}
