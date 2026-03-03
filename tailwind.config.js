@@ -26,6 +26,14 @@ export default {
 				'aegislash-red': '#C41E3A',
 				'aegislash-shadow': '#2D1F3F',
 				'aegislash-cream': '#F5F5DC',
+
+				// Emboar (Fiery) Theme Colors
+				'emboar-orange': '#E87E3C',
+				'emboar-blue': '#5BC5E8',
+				'emboar-dark': '#2D2420',
+				'emboar-black': '#1A1512',
+				'emboar-cream': '#F5F0E8',
+				'emboar-red': '#C94A4A',
 			},
 			animation: {
 				'flash-gold': 'flashGold 0.6s ease-out',
@@ -163,6 +171,31 @@ export default {
 					'warning-content': '#2D1F3F',
 					error: '#C41E3A',
 					'error-content': '#F5F5DC'
+				}
+			},
+			{
+				// Shiny Emboar: fiery boar with blue flames
+				emboar: {
+					primary: '#5BC5E8',
+					'primary-content': '#1A1512',
+					secondary: '#E87E3C',
+					'secondary-content': '#1A1512',
+					accent: '#C94A4A',
+					'accent-content': '#F5F0E8',
+					neutral: '#3D322C',
+					'neutral-content': '#F5F0E8',
+					'base-100': '#1A1512',
+					'base-200': '#2D2420',
+					'base-300': '#3D322C',
+					'base-content': '#F5F0E8',
+					info: '#5BC5E8',
+					'info-content': '#1A1512',
+					success: '#4ADE80',
+					'success-content': '#042514',
+					warning: '#E87E3C',
+					'warning-content': '#1A1512',
+					error: '#C94A4A',
+					'error-content': '#F5F0E8'
 				}
 			}
 		]

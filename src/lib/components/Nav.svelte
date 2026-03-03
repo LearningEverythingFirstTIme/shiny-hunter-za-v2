@@ -29,8 +29,14 @@
 		aegislash: {
 			icon: '🛡️',
 			label: 'Aegislash',
-			tooltip: 'Aegislash (royal) → Sylveon (light)',
+			tooltip: 'Aegislash (royal) → Emboar (fiery)',
 			class: 'aegislash-active'
+		},
+		emboar: {
+			icon: '🔥',
+			label: 'Emboar',
+			tooltip: 'Emboar (fiery) → Sylveon (light)',
+			class: 'emboar-active'
 		}
 	};
 
@@ -73,12 +79,13 @@
 
 	<!-- User section -->
 	<div class="navbar-end gap-2">
-		<!-- Theme cycle button: cycles through sylveon → umbreon → aegislash -->
+		<!-- Theme cycle button: cycles through sylveon → umbreon → aegislash → emboar -->
 		<button
 			class="btn btn-ghost btn-sm btn-circle theme-toggle"
 			class:sylveon-active={currentTheme === 'sylveon'}
 			class:umbreon-active={currentTheme === 'umbreon'}
 			class:aegislash-active={currentTheme === 'aegislash'}
+			class:emboar-active={currentTheme === 'emboar'}
 			on:click={theme.cycle}
 			title={config.tooltip}
 			aria-label="Cycle theme: currently {config.label}, next {themeConfig[nextTheme].label}"
@@ -194,6 +201,13 @@
 		animation: shieldGlow 4s ease-in-out infinite;
 	}
 
+	/* Emboar (fiery) theme - blue flame glow */
+	.theme-toggle.emboar-active {
+		color: #5BC5E8;
+		filter: drop-shadow(0 0 8px rgba(91, 197, 232, 0.6)) drop-shadow(0 0 16px rgba(232, 126, 60, 0.3));
+		animation: flameGlow 3s ease-in-out infinite;
+	}
+
 	@keyframes ringPulse {
 		0%, 100% { filter: drop-shadow(0 0 4px rgba(0, 191, 255, 0.5)); }
 		50%       { filter: drop-shadow(0 0 10px rgba(0, 191, 255, 0.9)); }
@@ -205,6 +219,15 @@
 		}
 		50% { 
 			filter: drop-shadow(0 0 10px rgba(244, 224, 77, 0.8)) drop-shadow(0 0 16px rgba(196, 30, 58, 0.4));
+		}
+	}
+
+	@keyframes flameGlow {
+		0%, 100% { 
+			filter: drop-shadow(0 0 6px rgba(91, 197, 232, 0.5)) drop-shadow(0 0 12px rgba(232, 126, 60, 0.2));
+		}
+		50% { 
+			filter: drop-shadow(0 0 12px rgba(91, 197, 232, 0.9)) drop-shadow(0 0 24px rgba(232, 126, 60, 0.5));
 		}
 	}
 </style>

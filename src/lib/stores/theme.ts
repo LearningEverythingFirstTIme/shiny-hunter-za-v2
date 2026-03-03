@@ -1,7 +1,7 @@
 import { writable } from 'svelte/store';
 import { browser } from '$app/environment';
 
-export type Theme = 'sylveon' | 'umbreon' | 'aegislash';
+export type Theme = 'sylveon' | 'umbreon' | 'aegislash' | 'emboar';
 
 const STORAGE_KEY = 'shiny-hunter-theme';
 
@@ -19,6 +19,7 @@ function createThemeStore() {
 			const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
 			const theme: Theme = saved === 'umbreon' ? 'umbreon'
 				: saved === 'aegislash' ? 'aegislash'
+				: saved === 'emboar' ? 'emboar'
 				: saved === 'sylveon' ? 'sylveon'
 				: prefersDark ? 'umbreon'
 				: 'sylveon';
@@ -26,10 +27,10 @@ function createThemeStore() {
 			set(theme);
 		},
 
-		/** Cycle through themes: sylveon → umbreon → aegislash → sylveon */
+		/** Cycle through themes: sylveon → umbreon → aegislash → emboar → sylveon */
 		cycle() {
 			update((current) => {
-				const order: Theme[] = ['sylveon', 'umbreon', 'aegislash'];
+				const order: Theme[] = ['sylveon', 'umbreon', 'aegislash', 'emboar'];
 				const currentIndex = order.indexOf(current);
 				const next = order[(currentIndex + 1) % order.length];
 				if (browser) {
@@ -56,7 +57,7 @@ function createThemeStore() {
 
 		/** Get the next theme in the cycle without changing it. */
 		peekNext(current: Theme): Theme {
-			const order: Theme[] = ['sylveon', 'umbreon', 'aegislash'];
+			const order: Theme[] = ['sylveon', 'umbreon', 'aegislash', 'emboar'];
 			const currentIndex = order.indexOf(current);
 			return order[(currentIndex + 1) % order.length];
 		}
