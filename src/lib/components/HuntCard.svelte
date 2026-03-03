@@ -271,7 +271,7 @@
 		</div>
 		<div class="h-2 rounded-full overflow-hidden transition-colors duration-300"
 			class:bg-base-200={$theme === 'sylveon'}
-			class:bg-umbreon-purple/20={$theme === 'umbreon'}>
+			class:bg-umbreon-purple={$theme === 'umbreon'}>
 			<div class="h-full rounded-full transition-all duration-500 relative"
 				style="width: {progressToOdds}%; background: linear-gradient(90deg, {progressColor}88, {progressColor});"
 				class:shadow-glow={$theme === 'umbreon' && progressToOdds >= 50}>
@@ -285,7 +285,7 @@
 	<!-- Encounters display + adjustment -->
 	<div class="rounded-xl p-3 mb-3 encounter-box relative z-10 transition-all duration-300"
 		class:bg-base-200={$theme === 'sylveon'}
-		class:bg-umbreon-purple/20={$theme === 'umbreon'}
+		class:bg-umbreon-purple={$theme === 'umbreon'}
 		class:glow={isHovered}>
 		<div class="flex items-center justify-between">
 			<!-- Left side: Encounters count -->

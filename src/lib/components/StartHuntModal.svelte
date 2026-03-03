@@ -36,7 +36,7 @@
 		<!-- Pokemon info -->
 		<div class="flex items-center gap-4 mb-5 p-3 rounded-xl transition-colors duration-300"
 			class:bg-base-200={$theme === 'sylveon'}
-			class:bg-umbreon-purple/20={$theme === 'umbreon'}>
+			class:bg-umbreon-purple={$theme === 'umbreon'}>
 			<img
 				src={getShinySpriteUrl(pokemon.nationalId)}
 				alt={pokemon.name}

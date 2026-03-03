@@ -175,7 +175,7 @@
 							{@const pct = Math.round((range.count / total) * 100)}
 							<div class="flex items-center gap-3">
 								<span class="text-xs font-medium w-16">{range.label}</span>
-								<div class="flex-1 h-3 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple/20={$theme === 'umbreon'}>
+								<div class="flex-1 h-3 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple={$theme === 'umbreon'}>
 									<div class="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden"
 										style="width: {pct}%; background-color: {range.color};"
 										class:shadow-glow={$theme === 'umbreon'}>
@@ -354,7 +354,7 @@
 								</span>
 								<span class="opacity-60">{count} ({pct}%)</span>
 							</div>
-							<div class="h-2 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple/20={$theme === 'umbreon'}>
+							<div class="h-2 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple={$theme === 'umbreon'}>
 								<div class="h-full rounded-full progress-fill transition-all duration-500 relative overflow-hidden"
 									style="width: {pct}%;">
 									<div class="absolute inset-0 shimmer-effect"></div>
