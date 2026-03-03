@@ -82,7 +82,7 @@
 			<button
 				class="btn btn-primary flex-[2] font-bold"
 				on:click={() => dispatch('start', { method: selectedMethod })}
-	003e
+			>
 				🎯 Start Hunt
 			</button>
 		</div>
