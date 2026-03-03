@@ -16,21 +16,21 @@
 	let abandoning = false;
 	let pausing = false;
 	let isAlpha = false;
-	
+
 	let showNotes = false;
 	let notes = hunt.notes || '';
 	let savingNotes = false;
-	
+
 	let showMethodEdit = false;
 	let selectedMethod = hunt.method;
 	let savingMethod = false;
-	
+
 	let showBulkAdd = false;
 
 	// Tick every minute so elapsed time + enc/hr stay fresh
 	let now = Date.now();
 	const ticker = setInterval(() => { now = Date.now(); }, 60_000);
-	
+
 	onDestroy(() => clearInterval(ticker));
 
 	$: elapsedMs = hunt.isPaused && hunt.pausedAt
@@ -52,10 +52,10 @@
 
 	// Progress towards odds (1/4096)
 	$: progressToOdds = Math.min(100, (hunt.encounters / 4096) * 100);
-	
+
 	// Theme-aware progress colors
-	$: progressColor = $theme === 'umbreon' 
-		? (progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#F4D03F' : '#2D1B4E')
+	$: progressColor = $theme === 'umbreon'
+		? (progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#00BFFF' : '#111120')
 		: (progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#87CEEB' : '#FFB7C5');
 
 	// Find Pokemon to get EVs
@@ -135,17 +135,17 @@
 		// Skip tilt effect on touch devices to prevent panel movement when clicking buttons
 		if (window.matchMedia('(pointer: coarse)').matches) return;
 		if (!cardElement) return;
-		
+
 		const rect = cardElement.getBoundingClientRect();
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
-		
+
 		const centerX = rect.width / 2;
 		const centerY = rect.height / 2;
-		
+
 		const rotateX = (y - centerY) / 15;
 		const rotateY = (centerX - x) / 15;
-		
+
 		cardElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.01)`;
 	}
 
@@ -203,11 +203,8 @@
 			/>
 		</div>
 		<div class="flex-1 min-w-0">
-			<p class="font-bold text-base leading-tight pokemon-name transition-all duration-300"
-				class:highlight={isHovered}
-				class:text-dark-text={$theme === 'sylveon'}
-				class:text-umbreon-moon={$theme === 'umbreon'}
-				class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}>
+			<p class="font-bold text-base leading-tight truncate pokemon-name transition-all duration-300"
+				class:highlight={isHovered}>
 				{hunt.pokemonName}
 				{#if pokemon?.evs}
 					<span class="text-xs ml-1 font-mono block transition-colors duration-300"
@@ -218,8 +215,8 @@
 				{/if}
 			</p>
 			{#if showMethodEdit}
-				<select 
-					bind:value={selectedMethod} 
+				<select
+					bind:value={selectedMethod}
 					class="select select-bordered select-xs w-full mt-1"
 				>
 					{#each HUNT_METHODS as method}
@@ -227,14 +224,14 @@
 					{/each}
 				</select>
 				<div class="flex gap-1 mt-1">
-					<button 
+					<button
 						class="btn btn-xs btn-primary"
 						on:click={onSaveMethod}
 						disabled={savingMethod || selectedMethod === hunt.method}
 					>
 						{savingMethod ? '...' : 'Save'}
 					</button>
-					<button 
+					<button
 						class="btn btn-xs btn-ghost"
 						on:click={() => { showMethodEdit = false; selectedMethod = hunt.method; }}
 					>
@@ -242,7 +239,7 @@
 					</button>
 				</div>
 			{:else}
-				<button 
+				<button
 					class="text-xs opacity-60 hover:text-primary transition-colors text-left"
 					on:click={() => { showMethodEdit = true; selectedMethod = hunt.method; }}
 				>
@@ -264,8 +261,7 @@
 		<div class="flex justify-between text-xs mb-1">
 			<span class="opacity-50">Progress to odds</span>
 			<span class="font-medium transition-colors duration-300"
-				style="color: {progressColor};"
-				class:text-shadow-glow={$theme === 'umbreon' && progressToOdds >= 50}>
+				style="color: {progressColor};">
 				{progressToOdds.toFixed(1)}%
 			</span>
 		</div>
@@ -292,21 +288,16 @@
 			<div>
 				<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
 				<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
-					class:scale={isHovered}
-					class:text-dark-text={$theme === 'sylveon'}
-					class:text-umbreon-moon={$theme === 'umbreon'}
-					class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}>
+					class:scale={isHovered}>
 					{hunt.encounters.toLocaleString()}
 				</p>
 			</div>
-			<!-- Right side: -1 button (away from main + buttons) -->
+			<!-- Right side: rate + -1 button -->
 			<div class="flex items-center gap-3">
 				{#if hunt.encounters > 0}
 					<div class="text-right mr-2">
 						<p class="text-xs font-medium opacity-60 mb-0.5">RATE</p>
-						<p class="text-lg font-bold tabular-nums leading-none transition-colors duration-300"
-							class:text-dark-text={$theme === 'sylveon'}
-							class:text-umbreon-moon={$theme === 'umbreon'}>
+						<p class="text-lg font-bold tabular-nums leading-none transition-colors duration-300">
 							{encPerHourDisplay}
 						</p>
 					</div>
@@ -395,14 +386,14 @@
 				rows="2"
 			></textarea>
 			<div class="flex justify-end gap-1 mt-1">
-				<button 
+				<button
 					class="btn btn-xs btn-primary"
 					on:click={onSaveNotes}
 					disabled={savingNotes}
 				>
 					{savingNotes ? '...' : 'Save Notes'}
 				</button>
-				<button 
+				<button
 					class="btn btn-xs btn-ghost"
 					on:click={() => { showNotes = false; notes = hunt.notes || ''; }}
 				>
@@ -411,7 +402,7 @@
 			</div>
 		</div>
 	{:else}
-		<button 
+		<button
 			class="btn btn-ghost btn-xs w-full mb-3 relative z-10 opacity-50 hover:opacity-100 transition-all"
 			on:click={() => { showNotes = true; notes = hunt.notes || ''; }}
 		>
@@ -472,11 +463,6 @@
 		border-color: #FFB7C5;
 	}
 
-	:root[data-theme="umbreon"] .hunt-card:hover {
-		box-shadow: 0 12px 32px rgba(244, 208, 63, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4);
-		border-color: rgba(244, 208, 63, 0.5);
-	}
-
 	@keyframes fadeIn {
 		from { opacity: 0; transform: translateY(-4px); }
 		to { opacity: 1; transform: translateY(0); }
@@ -491,8 +477,21 @@
 		animation: glowPulse 2s ease infinite;
 	}
 
-	:root[data-theme="umbreon"] .hunt-glow {
-		background: radial-gradient(circle at 50% 0%, rgba(244, 208, 63, 0.1) 0%, transparent 60%);
+	:root[data-theme="sylveon"] .pokemon-name.highlight {
+		color: #FFB7C5;
+	}
+
+	:root[data-theme="sylveon"] .encounter-box.glow {
+		background: linear-gradient(135deg, rgba(255, 183, 197, 0.15) 0%, rgba(255, 236, 242, 0.5) 100%);
+		box-shadow: 0 2px 12px rgba(255, 183, 197, 0.2);
+	}
+
+	.encounter-count.scale {
+		transform: scale(1.05);
+	}
+
+	:root[data-theme="sylveon"] .encounter-count.scale {
+		color: #FFB7C5;
 	}
 
 	@keyframes glowPulse {
@@ -511,38 +510,6 @@
 	@keyframes gentleBounce {
 		0%, 100% { transform: translateY(0); }
 		50% { transform: translateY(-3px); }
-	}
-
-	:root[data-theme="sylveon"] .pokemon-name.highlight {
-		color: #FFB7C5;
-	}
-
-	:root[data-theme="umbreon"] .pokemon-name.highlight {
-		color: #F4D03F;
-		text-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
-	}
-
-	:root[data-theme="sylveon"] .encounter-box.glow {
-		background: linear-gradient(135deg, rgba(255, 183, 197, 0.15) 0%, rgba(255, 236, 242, 0.5) 100%);
-		box-shadow: 0 2px 12px rgba(255, 183, 197, 0.2);
-	}
-
-	:root[data-theme="umbreon"] .encounter-box.glow {
-		background: linear-gradient(135deg, rgba(244, 208, 63, 0.1) 0%, rgba(45, 27, 78, 0.3) 100%);
-		box-shadow: 0 2px 12px rgba(244, 208, 63, 0.15);
-	}
-
-	.encounter-count.scale {
-		transform: scale(1.05);
-	}
-
-	:root[data-theme="sylveon"] .encounter-count.scale {
-		color: #FFB7C5;
-	}
-
-	:root[data-theme="umbreon"] .encounter-count.scale {
-		color: #F4D03F;
-		text-shadow: 0 0 10px rgba(244, 208, 63, 0.4);
 	}
 
 	.increment-btn {
@@ -623,10 +590,6 @@
 		background: rgba(255, 183, 197, 0.1);
 	}
 
-	:root[data-theme="umbreon"] .alpha-toggle.hovered {
-		background: rgba(244, 208, 63, 0.1);
-	}
-
 	.alpha-badge {
 		animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 	}
@@ -636,12 +599,51 @@
 		50% { opacity: 0.7; }
 	}
 
-	/* Umbreon glow effects */
-	:root[data-theme="umbreon"] .shadow-glow {
-		box-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
+	/* ── Umbreon Dark Mode Overrides ── */
+	:global([data-theme='umbreon']) .hunt-card {
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
 	}
 
-	:root[data-theme="umbreon"] .text-shadow-glow {
-		text-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
+	:global([data-theme='umbreon']) .hunt-card:hover {
+		box-shadow: 0 12px 32px rgba(0, 191, 255, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
+		border-color: rgba(0, 191, 255, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .hunt-glow {
+		background: radial-gradient(circle at 50% 0%, rgba(0, 191, 255, 0.12) 0%, transparent 60%);
+	}
+
+	:global([data-theme='umbreon']) .pokemon-name.highlight {
+		color: #00bfff;
+	}
+
+	:global([data-theme='umbreon']) .encounter-box.glow {
+		background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(17, 17, 32, 0.8) 100%);
+		box-shadow: 0 2px 12px rgba(0, 191, 255, 0.15);
+	}
+
+	:global([data-theme='umbreon']) .encounter-count.scale {
+		color: #00bfff;
+	}
+
+	:global([data-theme='umbreon']) .alpha-toggle.hovered {
+		background: rgba(0, 191, 255, 0.08);
+	}
+
+	:global([data-theme='umbreon']) .progress-bar-bg {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	:global([data-theme='umbreon']) .shadow-glow {
+		box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .shimmer-overlay {
+		background: linear-gradient(
+			90deg,
+			transparent,
+			rgba(0, 191, 255, 0.25),
+			transparent
+		);
 	}
 </style>

@@ -6,7 +6,7 @@
 	import { subscribeHunts, unsubscribeHunts } from '$lib/stores/hunts';
 	import { subscribeShinies, unsubscribeShinies } from '$lib/stores/shinies';
 	import { theme } from '$lib/stores/theme';
-	import { onDestroy, onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 
 	let prevUserId: string | null = null;
 
@@ -37,10 +37,7 @@
 
 <ToastContainer />
 
-<div class="min-h-screen flex flex-col transition-colors duration-300"
-	class:bg-cream={$theme === 'sylveon'}
-	class:bg-umbreon-black={$theme === 'umbreon'}
->
+<div class="min-h-screen flex flex-col bg-base-100">
 	{#if $authLoading}
 		<!-- Loading screen -->
 		<div class="flex-1 flex items-center justify-center">
@@ -62,9 +59,7 @@
 				<div class="text-7xl mb-4 select-none">
 					<span class="inline-block animate-pulse">✨</span>
 				</div>
-				<h1 class="text-3xl font-black mb-2 transition-colors duration-300"
-					class:text-dark-text={$theme === 'sylveon'}
-					class:text-umbreon-moon={$theme === 'umbreon'}
+				<h1 class="text-3xl font-black mb-2 text-base-content"
 					class:animate-ring-pulse={$theme === 'umbreon'}
 				>
 					Shiny Hunter Z-A

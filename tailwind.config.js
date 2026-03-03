@@ -52,21 +52,21 @@ export default {
 					'0%': { backgroundPosition: '-200% 0' },
 					'100%': { backgroundPosition: '200% 0' }
 				},
-				// Umbreon Ring Glow Animation
+				// Umbreon Ring Glow Animation (neon electric-blue)
 				ringGlow: {
-					'0%, 100%': { 
-						boxShadow: '0 0 5px rgba(244, 208, 63, 0.4), 0 0 10px rgba(244, 208, 63, 0.2), 0 0 15px rgba(244, 208, 63, 0.1)'
+					'0%, 100%': {
+						boxShadow: '0 0 5px rgba(0, 191, 255, 0.4), 0 0 10px rgba(0, 191, 255, 0.2), 0 0 15px rgba(0, 191, 255, 0.1)'
 					},
-					'50%': { 
-						boxShadow: '0 0 10px rgba(244, 208, 63, 0.8), 0 0 20px rgba(244, 208, 63, 0.5), 0 0 30px rgba(244, 208, 63, 0.3)'
+					'50%': {
+						boxShadow: '0 0 10px rgba(0, 191, 255, 0.8), 0 0 20px rgba(0, 191, 255, 0.5), 0 0 30px rgba(0, 191, 255, 0.3)'
 					}
 				},
 				ringPulse: {
-					'0%, 100%': { 
-						textShadow: '0 0 5px rgba(244, 208, 63, 0.6), 0 0 10px rgba(244, 208, 63, 0.3)'
+					'0%, 100%': {
+						textShadow: '0 0 5px rgba(0, 191, 255, 0.6), 0 0 10px rgba(0, 191, 255, 0.3)'
 					},
-					'50%': { 
-						textShadow: '0 0 10px rgba(244, 208, 63, 1), 0 0 20px rgba(244, 208, 63, 0.6), 0 0 30px rgba(244, 208, 63, 0.4)'
+					'50%': {
+						textShadow: '0 0 10px rgba(0, 191, 255, 1), 0 0 20px rgba(0, 191, 255, 0.6), 0 0 30px rgba(0, 191, 255, 0.4)'
 					}
 				},
 				moonShimmer: {
@@ -108,36 +108,28 @@ export default {
 				}
 			},
 			{
+				// Shiny Umbreon: deep black body, neon electric-blue rings, red eyes
 				umbreon: {
-					// Umbreon's glowing yellow rings as primary
-					primary: '#F4D03F',
-					'primary-content': '#0D0D0D',
-					// Moonlight silver as secondary
-					secondary: '#8B8B9E',
-					'secondary-content': '#0D0D0D',
-					// Rich gold accent
-					accent: '#FFD700',
-					'accent-content': '#0D0D0D',
-					// Deep purple neutral
-					neutral: '#2D1B4E',
-					'neutral-content': '#E8E8E8',
-					// Deep dark backgrounds
-					'base-100': '#0D0D0D',
-					'base-200': '#1A1A2E',
-					'base-300': '#2D1B4E',
-					'base-content': '#E8E8E8',
-					// Info - subtle purple glow
-					info: '#6B5B95',
-					'info-content': '#E8E8E8',
-					// Success - emerald glow in darkness
-					success: '#2ECC71',
-					'success-content': '#0D0D0D',
-					// Warning - amber glow
-					warning: '#F39C12',
-					'warning-content': '#0D0D0D',
-					// Error - crimson in dark
-					error: '#E74C3C',
-					'error-content': '#E8E8E8'
+					primary: '#00BFFF',
+					'primary-content': '#020B14',
+					secondary: '#1E8FFF',
+					'secondary-content': '#020B14',
+					accent: '#FF2424',
+					'accent-content': '#FFFFFF',
+					neutral: '#1A1A2C',
+					'neutral-content': '#B8CCF0',
+					'base-100': '#09090F',
+					'base-200': '#111120',
+					'base-300': '#1C1C2E',
+					'base-content': '#B8CCF0',
+					info: '#00BFFF',
+					'info-content': '#020B14',
+					success: '#22D45A',
+					'success-content': '#042514',
+					warning: '#F59E0B',
+					'warning-content': '#020B14',
+					error: '#FF3333',
+					'error-content': '#FFFFFF'
 				}
 			}
 		]

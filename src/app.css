@@ -9,20 +9,10 @@
 
 	body {
 		font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+		background-color: oklch(var(--b1));
+		color: oklch(var(--bc));
 		min-height: 100vh;
 		transition: background-color 0.3s ease, color 0.3s ease;
-	}
-
-	/* Default (Sylveon/Light) theme colors */
-	:root[data-theme="sylveon"] body {
-		background-color: #fff8f0;
-		color: #2d1b2e;
-	}
-
-	/* Umbreon (Dark) theme colors */
-	:root[data-theme="umbreon"] body {
-		background-color: #0D0D0D;
-		color: #E8E8E8;
 	}
 
 	img {
@@ -57,19 +47,18 @@
 	}
 
 	:root[data-theme="umbreon"] ::-webkit-scrollbar-track {
-		background: #1A1A2E;
+		background: #111120;
 		border-radius: 5px;
 	}
 
 	:root[data-theme="umbreon"] ::-webkit-scrollbar-thumb {
-		background: linear-gradient(180deg, #2D1B4E, #F4D03F);
+		background: linear-gradient(180deg, #00bfff, #0090cc);
 		border-radius: 5px;
-		border: 2px solid #1A1A2E;
+		border: 2px solid #111120;
 	}
 
 	:root[data-theme="umbreon"] ::-webkit-scrollbar-thumb:hover {
-		background: linear-gradient(180deg, #F4D03F, #FFD700);
-		box-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
+		background: linear-gradient(180deg, #33cfff, #00bfff);
 	}
 
 	/* Selection colors - Sylveon */
@@ -80,8 +69,8 @@
 
 	/* Selection colors - Umbreon */
 	:root[data-theme="umbreon"] ::selection {
-		background-color: #F4D03F;
-		color: #0D0D0D;
+		background-color: rgba(0, 191, 255, 0.35);
+		color: #e0f4ff;
 	}
 
 	/* Focus visible styles - Sylveon */
@@ -92,16 +81,20 @@
 
 	/* Focus visible styles - Umbreon */
 	:root[data-theme="umbreon"] :focus-visible {
-		outline: 2px solid #F4D03F;
+		outline: 2px solid #00bfff;
 		outline-offset: 2px;
-		box-shadow: 0 0 10px rgba(244, 208, 63, 0.3);
+		box-shadow: 0 0 8px rgba(0, 191, 255, 0.3);
 	}
 }
 
 @layer components {
-	/* ========== SYLVEON THEME COMPONENTS ========== */
+	/* ========== SPRITE EFFECTS ========== */
 	:root[data-theme="sylveon"] .sprite-shadow {
 		filter: drop-shadow(0 0 8px rgba(255, 183, 197, 0.7));
+	}
+
+	:root[data-theme="umbreon"] .sprite-shadow {
+		filter: drop-shadow(0 0 8px rgba(0, 191, 255, 0.55));
 	}
 
 	:root[data-theme="sylveon"] .shiny-glow {
@@ -109,18 +102,12 @@
 			drop-shadow(0 0 6px rgba(255, 183, 197, 0.8));
 	}
 
-	/* ========== UMBREON THEME COMPONENTS ========== */
-	:root[data-theme="umbreon"] .sprite-shadow {
-		filter: drop-shadow(0 0 8px rgba(244, 208, 63, 0.4));
-	}
-
 	:root[data-theme="umbreon"] .shiny-glow {
-		filter: drop-shadow(0 0 20px rgba(244, 208, 63, 0.9))
-			drop-shadow(0 0 10px rgba(255, 215, 0, 0.6))
-			drop-shadow(0 0 30px rgba(244, 208, 63, 0.4));
+		filter: drop-shadow(0 0 14px rgba(255, 215, 0, 0.9))
+			drop-shadow(0 0 6px rgba(0, 191, 255, 0.5));
 	}
 
-	/* Card hover effect - theme aware */
+	/* ========== CARD HOVER ========== */
 	.card-hover {
 		@apply transition-all duration-200 hover:-translate-y-1;
 	}
@@ -130,10 +117,10 @@
 	}
 
 	:root[data-theme="umbreon"] .card-hover:hover {
-		box-shadow: 0 12px 24px rgba(244, 208, 63, 0.2), 0 0 30px rgba(244, 208, 63, 0.1);
+		box-shadow: 0 12px 24px rgba(0, 191, 255, 0.18);
 	}
 
-	/* Type badge base */
+	/* ========== TYPE BADGE ========== */
 	.type-badge {
 		@apply badge badge-sm font-semibold text-xs px-2 py-1 border-0;
 		transition: all 0.2s ease;
@@ -141,36 +128,28 @@
 
 	.type-badge:hover {
 		transform: scale(1.1);
-	}
-
-	:root[data-theme="sylveon"] .type-badge:hover {
 		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 	}
 
-	:root[data-theme="umbreon"] .type-badge:hover {
-		box-shadow: 0 2px 8px rgba(244, 208, 63, 0.3);
-	}
-
-	/* Page header - theme aware */
+	/* ========== PAGE HEADERS ========== */
 	.page-header {
 		@apply text-2xl font-bold mb-1;
+		color: oklch(var(--bc));
 	}
 
 	:root[data-theme="sylveon"] .page-header {
-		color: #2d1b2e;
 		text-shadow: 0 1px 2px rgba(255, 183, 197, 0.3);
 	}
 
 	:root[data-theme="umbreon"] .page-header {
-		color: #E8E8E8;
-		text-shadow: 0 0 10px rgba(244, 208, 63, 0.5), 0 0 20px rgba(244, 208, 63, 0.3);
+		text-shadow: 0 0 12px rgba(0, 191, 255, 0.4);
 	}
 
 	.page-subheader {
 		@apply text-sm mb-6 opacity-70;
 	}
 
-	/* Shimmer background - theme aware */
+	/* ========== SHIMMER BACKGROUND ========== */
 	:root[data-theme="sylveon"] .shimmer-bg {
 		background: linear-gradient(
 			90deg,
@@ -185,15 +164,15 @@
 	:root[data-theme="umbreon"] .shimmer-bg {
 		background: linear-gradient(
 			90deg,
-			rgba(244, 208, 63, 0) 0%,
-			rgba(244, 208, 63, 0.3) 50%,
-			rgba(244, 208, 63, 0) 100%
+			rgba(0, 191, 255, 0) 0%,
+			rgba(0, 191, 255, 0.3) 50%,
+			rgba(0, 191, 255, 0) 100%
 		);
 		background-size: 200% 100%;
 		animation: shimmer 2s linear infinite;
 	}
 
-	/* Gradient text - theme aware */
+	/* ========== GRADIENT TEXT ========== */
 	:root[data-theme="sylveon"] .gradient-text {
 		background: linear-gradient(90deg, #FFB7C5, #87CEEB, #FFD700, #FFB7C5);
 		background-size: 300% 100%;
@@ -204,7 +183,7 @@
 	}
 
 	:root[data-theme="umbreon"] .gradient-text {
-		background: linear-gradient(90deg, #F4D03F, #FFD700, #C0C0C0, #F4D03F);
+		background: linear-gradient(90deg, #00bfff, #ff2424, #00bfff, #1e8fff);
 		background-size: 300% 100%;
 		-webkit-background-clip: text;
 		-webkit-text-fill-color: transparent;
@@ -212,21 +191,21 @@
 		animation: gradientShift 3s ease infinite;
 	}
 
-	/* Floating animation */
+	/* ========== FLOAT ========== */
 	.float {
 		animation: float 3s ease-in-out infinite;
 	}
 
-	/* Pulse glow - theme aware */
+	/* ========== PULSE GLOW ========== */
 	:root[data-theme="sylveon"] .pulse-glow {
 		animation: pulseGlow 2s ease-in-out infinite;
 	}
 
 	:root[data-theme="umbreon"] .pulse-glow {
-		animation: ringPulse 2s ease-in-out infinite;
+		animation: pulseGlowUmbreon 2s ease-in-out infinite;
 	}
 
-	/* Glass effect - theme aware */
+	/* ========== GLASS ========== */
 	:root[data-theme="sylveon"] .glass {
 		background: rgba(255, 248, 240, 0.7);
 		backdrop-filter: blur(10px);
@@ -234,13 +213,12 @@
 	}
 
 	:root[data-theme="umbreon"] .glass {
-		background: rgba(13, 13, 13, 0.8);
+		background: rgba(9, 9, 15, 0.82);
 		backdrop-filter: blur(10px);
 		-webkit-backdrop-filter: blur(10px);
-		border: 1px solid rgba(244, 208, 63, 0.2);
 	}
 
-	/* Button shine effect */
+	/* ========== BUTTON SHINE ========== */
 	.btn-shine {
 		position: relative;
 		overflow: hidden;
@@ -253,126 +231,22 @@
 		left: -100%;
 		width: 100%;
 		height: 100%;
-		background: linear-gradient(
-			90deg,
-			transparent,
-			rgba(255, 255, 255, 0.4),
-			transparent
-		);
 		transition: left 0.5s ease;
+	}
+
+	:root[data-theme="sylveon"] .btn-shine::after {
+		background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+	}
+
+	:root[data-theme="umbreon"] .btn-shine::after {
+		background: linear-gradient(90deg, transparent, rgba(0, 191, 255, 0.2), transparent);
 	}
 
 	.btn-shine:hover::after {
 		left: 100%;
 	}
 
-	/* ========== UMBREON SPECIFIC EFFECTS ========== */
-	/* Ring glow border effect */
-	:root[data-theme="umbreon"] .ring-glow {
-		animation: ringGlow 3s ease-in-out infinite;
-	}
-
-	/* Moonlight gradient background */
-	:root[data-theme="umbreon"] .moonlight-gradient {
-		background: linear-gradient(180deg, #0D0D0D 0%, #1A1A2E 50%, #2D1B4E 100%);
-	}
-
-	/* Subtle star field effect */
-	:root[data-theme="umbreon"] .star-field {
-		background-image: 
-			radial-gradient(2px 2px at 20px 30px, rgba(244, 208, 63, 0.3), transparent),
-			radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.2), transparent),
-			radial-gradient(2px 2px at 90px 40px, rgba(244, 208, 63, 0.2), transparent),
-			radial-gradient(2px 2px at 130px 80px, rgba(255, 255, 255, 0.15), transparent),
-			radial-gradient(2px 2px at 160px 20px, rgba(244, 208, 63, 0.25), transparent);
-		background-repeat: repeat;
-		background-size: 200px 100px;
-	}
-
-	/* Yellow ring border glow */
-	:root[data-theme="umbreon"] .ring-border {
-		border: 1px solid rgba(244, 208, 63, 0.3);
-		box-shadow: 
-			inset 0 0 20px rgba(244, 208, 63, 0.05),
-			0 0 20px rgba(244, 208, 63, 0.1);
-	}
-
-	:root[data-theme="umbreon"] .ring-border:hover {
-		border-color: rgba(244, 208, 63, 0.6);
-		box-shadow: 
-			inset 0 0 30px rgba(244, 208, 63, 0.1),
-			0 0 30px rgba(244, 208, 63, 0.2);
-	}
-
-	/* Hunt card progress bar colors - Umbreon */
-	:root[data-theme="umbreon"] .progress-umbreon-low {
-		background: linear-gradient(90deg, #2D1B4E, #4A3B6E);
-	}
-
-	:root[data-theme="umbreon"] .progress-umbreon-mid {
-		background: linear-gradient(90deg, #F4D03F, #FFD700);
-		box-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
-	}
-
-	:root[data-theme="umbreon"] .progress-umbreon-high {
-		background: linear-gradient(90deg, #FFD700, #FFF8DC);
-		box-shadow: 0 0 15px rgba(255, 215, 0, 0.7);
-	}
-}
-
-@layer utilities {
-	@keyframes shimmer {
-		0% { background-position: -200% 0; }
-		100% { background-position: 200% 0; }
-	}
-
-	@keyframes gradientShift {
-		0%, 100% { background-position: 0% 50%; }
-		50% { background-position: 100% 50%; }
-	}
-
-	@keyframes float {
-		0%, 100% { transform: translateY(0); }
-		50% { transform: translateY(-10px); }
-	}
-
-	@keyframes pulseGlow {
-		0%, 100% { 
-			box-shadow: 0 0 20px rgba(255, 183, 197, 0.4);
-		}
-		50% { 
-			box-shadow: 0 0 40px rgba(255, 183, 197, 0.8), 0 0 60px rgba(255, 215, 0, 0.3);
-		}
-	}
-
-	/* Umbreon ring glow keyframes */
-	@keyframes ringGlow {
-		0%, 100% { 
-			box-shadow: 0 0 5px rgba(244, 208, 63, 0.4), 0 0 10px rgba(244, 208, 63, 0.2), 0 0 15px rgba(244, 208, 63, 0.1);
-		}
-		50% { 
-			box-shadow: 0 0 10px rgba(244, 208, 63, 0.8), 0 0 20px rgba(244, 208, 63, 0.5), 0 0 30px rgba(244, 208, 63, 0.3);
-		}
-	}
-
-	@keyframes ringPulse {
-		0%, 100% { 
-			text-shadow: 0 0 5px rgba(244, 208, 63, 0.6), 0 0 10px rgba(244, 208, 63, 0.3);
-		}
-		50% { 
-			text-shadow: 0 0 10px rgba(244, 208, 63, 1), 0 0 20px rgba(244, 208, 63, 0.6), 0 0 30px rgba(244, 208, 63, 0.4);
-		}
-	}
-
-	/* Stagger animation delays */
-	.stagger-1 { animation-delay: 0.1s; }
-	.stagger-2 { animation-delay: 0.2s; }
-	.stagger-3 { animation-delay: 0.3s; }
-	.stagger-4 { animation-delay: 0.4s; }
-	.stagger-5 { animation-delay: 0.5s; }
-	.stagger-6 { animation-delay: 0.6s; }
-
-	/* Hover lift effect - theme aware */
+	/* ========== HOVER LIFT ========== */
 	.hover-lift {
 		transition: transform 0.3s ease, box-shadow 0.3s ease;
 	}
@@ -384,10 +258,10 @@
 
 	:root[data-theme="umbreon"] .hover-lift:hover {
 		transform: translateY(-4px);
-		box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5), 0 0 30px rgba(244, 208, 63, 0.15);
+		box-shadow: 0 12px 24px rgba(0, 191, 255, 0.18);
 	}
 
-	/* Border gradient - theme aware */
+	/* ========== BORDER GRADIENT ========== */
 	.border-gradient {
 		position: relative;
 	}
@@ -409,11 +283,54 @@
 	}
 
 	:root[data-theme="umbreon"] .border-gradient::before {
-		background: linear-gradient(135deg, #F4D03F, #FFD700, #C0C0C0);
+		background: linear-gradient(135deg, #00bfff, #1e8fff, #ff2424);
 	}
 }
 
-/* ========== TYPE COLORS - UNIVERSAL ========== */
+@layer utilities {
+	@keyframes shimmer {
+		0% { background-position: -200% 0; }
+		100% { background-position: 200% 0; }
+	}
+
+	@keyframes gradientShift {
+		0%, 100% { background-position: 0% 50%; }
+		50% { background-position: 100% 50%; }
+	}
+
+	@keyframes float {
+		0%, 100% { transform: translateY(0); }
+		50% { transform: translateY(-10px); }
+	}
+
+	@keyframes pulseGlow {
+		0%, 100% {
+			box-shadow: 0 0 20px rgba(255, 183, 197, 0.4);
+		}
+		50% {
+			box-shadow: 0 0 40px rgba(255, 183, 197, 0.8), 0 0 60px rgba(255, 215, 0, 0.3);
+		}
+	}
+
+	@keyframes pulseGlowUmbreon {
+		0%, 100% {
+			box-shadow: 0 0 20px rgba(0, 191, 255, 0.3);
+		}
+		50% {
+			box-shadow: 0 0 40px rgba(0, 191, 255, 0.7), 0 0 60px rgba(255, 36, 36, 0.2);
+		}
+	}
+
+	/* Stagger animation delays */
+	.stagger-1 { animation-delay: 0.1s; }
+	.stagger-2 { animation-delay: 0.2s; }
+	.stagger-3 { animation-delay: 0.3s; }
+	.stagger-4 { animation-delay: 0.4s; }
+	.stagger-5 { animation-delay: 0.5s; }
+	.stagger-6 { animation-delay: 0.6s; }
+}
+
+/* ========== TYPE COLORS — UNIVERSAL ========== */
 .type-Normal { background-color: #A8A878; color: white; }
 .type-Fire { background-color: #F08030; color: white; }
 .type-Water { background-color: #6890F0; color: white; }
@@ -432,12 +349,3 @@
 .type-Dark { background-color: #705848; color: white; }
 .type-Steel { background-color: #B8B8D0; color: #2D1B2E; }
 .type-Fairy { background-color: #EE99AC; color: #2D1B2E; }
-
-/* Umbreon theme type badge enhancements */
-:root[data-theme="umbreon"] .type-badge.type-Dark {
-	box-shadow: 0 0 8px rgba(112, 88, 72, 0.5);
-}
-
-:root[data-theme="umbreon"] .type-badge.type-Ghost {
-	box-shadow: 0 0 8px rgba(112, 88, 152, 0.5);
-}

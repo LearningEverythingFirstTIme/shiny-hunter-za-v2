@@ -21,17 +21,17 @@
 
 	function handleMouseMove(e: MouseEvent) {
 		if (!cardElement) return;
-		
+
 		const rect = cardElement.getBoundingClientRect();
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
-		
+
 		const centerX = rect.width / 2;
 		const centerY = rect.height / 2;
-		
+
 		const rotateX = (y - centerY) / 12;
 		const rotateY = (centerX - x) / 12;
-		
+
 		cardElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
 	}
 
@@ -46,8 +46,8 @@
 	}
 
 	// Determine rarity tier based on encounters
-	$: rarityTier = shiny.encounters > 4000 ? 'legendary' : 
-	               shiny.encounters > 2000 ? 'epic' : 
+	$: rarityTier = shiny.encounters > 4000 ? 'legendary' :
+	               shiny.encounters > 2000 ? 'epic' :
 	               shiny.encounters > 1000 ? 'rare' : 'common';
 </script>
 
@@ -92,8 +92,7 @@
 		<div class="flex justify-between items-start mb-2">
 			{#if rank !== null}
 				<span class="text-xs font-mono opacity-40 rank-badge transition-all duration-300"
-					class:highlight={isHovered}
-					class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}>
+					class:highlight={isHovered}>
 					#{rank}
 				</span>
 			{:else}
@@ -116,16 +115,12 @@
 				class:bounce={isHovered}
 			/>
 			<span class="absolute -bottom-1 -right-1 text-lg select-none sparkle-icon transition-all duration-300"
-				class:spin={isHovered}
-				class:text-umbreon-yellow={$theme === 'umbreon'}>✨</span>
+				class:spin={isHovered}>✨</span>
 		</div>
 
 		<!-- Name -->
-		<p class="text-center font-bold text-sm mb-3 pokemon-name transition-all duration-300" 
-			class:scale-text={isHovered}
-			class:text-dark-text={$theme === 'sylveon'}
-			class:text-umbreon-moon={$theme === 'umbreon'}
-			class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}>
+		<p class="text-center font-bold text-sm mb-3 pokemon-name transition-all duration-300"
+			class:scale-text={isHovered}>
 			{shiny.pokemonName}
 		</p>
 
@@ -136,10 +131,7 @@
 				class:bg-umbreon-purple={$theme === 'umbreon'}
 				class:glow={isHovered}>
 				<p class="opacity-50 font-medium">Encounters</p>
-				<p class="font-bold text-base tabular-nums encounter-count transition-colors duration-300"
-					class:text-dark-text={$theme === 'sylveon'}
-					class:text-umbreon-moon={$theme === 'umbreon'}
-					class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}>
+				<p class="font-bold text-base tabular-nums encounter-count">
 					{shiny.encounters.toLocaleString()}
 				</p>
 			</div>
@@ -148,11 +140,7 @@
 				class:bg-umbreon-purple={$theme === 'umbreon'}
 				class:glow={isHovered}>
 				<p class="opacity-50 font-medium">Duration</p>
-				<p class="font-bold text-base transition-colors duration-300"
-					class:text-dark-text={$theme === 'sylveon'}
-					class:text-umbreon-moon={$theme === 'umbreon'}>
-					{durationDisplay}
-				</p>
+				<p class="font-bold text-base">{durationDisplay}</p>
 			</div>
 		</div>
 
@@ -165,7 +153,10 @@
 </div>
 
 <style>
+	/* Light mode default */
 	.shiny-card {
+		background: linear-gradient(135deg, #FFF8F0 0%, #FFECF2 100%);
+		border-color: #FFB7C5;
 		box-shadow: 0 2px 8px rgba(45, 27, 46, 0.08);
 	}
 
@@ -173,17 +164,8 @@
 		box-shadow: 0 12px 32px rgba(255, 215, 0, 0.25), 0 4px 16px rgba(45, 27, 46, 0.12);
 	}
 
-	:root[data-theme="umbreon"] .shiny-card:hover {
-		box-shadow: 0 12px 32px rgba(244, 208, 63, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4);
-	}
-
 	:root[data-theme="sylveon"] .shiny-card.legendary:hover {
 		box-shadow: 0 12px 32px rgba(255, 215, 0, 0.4), 0 4px 16px rgba(45, 27, 46, 0.15);
-		border-color: #FFD700;
-	}
-
-	:root[data-theme="umbreon"] .shiny-card.legendary:hover {
-		box-shadow: 0 12px 32px rgba(244, 208, 63, 0.5), 0 4px 16px rgba(0, 0, 0, 0.5);
 		border-color: #FFD700;
 	}
 
@@ -192,17 +174,8 @@
 		border-color: #87CEEB;
 	}
 
-	:root[data-theme="umbreon"] .shiny-card.epic:hover {
-		box-shadow: 0 12px 32px rgba(192, 192, 192, 0.3), 0 4px 16px rgba(0, 0, 0, 0.4);
-		border-color: #C0C0C0;
-	}
-
 	:root[data-theme="sylveon"] .shiny-card.rare:hover {
 		box-shadow: 0 12px 32px rgba(255, 183, 197, 0.5), 0 4px 16px rgba(45, 27, 46, 0.12);
-	}
-
-	:root[data-theme="umbreon"] .shiny-card.rare:hover {
-		box-shadow: 0 12px 32px rgba(139, 139, 158, 0.4), 0 4px 16px rgba(0, 0, 0, 0.4);
 	}
 
 	.rarity-glow {
@@ -216,26 +189,14 @@
 		opacity: 1;
 	}
 
-	:root[data-theme="umbreon"] .rarity-glow.legendary {
-		background: radial-gradient(circle at 30% 30%, rgba(244, 208, 63, 0.4) 0%, transparent 50%);
-	}
-
 	.rarity-glow.epic {
 		background: radial-gradient(circle at 30% 30%, rgba(135, 206, 235, 0.3) 0%, transparent 50%);
 		opacity: 1;
 	}
 
-	:root[data-theme="umbreon"] .rarity-glow.epic {
-		background: radial-gradient(circle at 30% 30%, rgba(192, 192, 192, 0.3) 0%, transparent 50%);
-	}
-
 	.rarity-glow.rare {
 		background: radial-gradient(circle at 30% 30%, rgba(255, 183, 197, 0.3) 0%, transparent 50%);
 		opacity: 1;
-	}
-
-	:root[data-theme="umbreon"] .rarity-glow.rare {
-		background: radial-gradient(circle at 30% 30%, rgba(139, 139, 158, 0.3) 0%, transparent 50%);
 	}
 
 	@keyframes glowPulse {
@@ -282,11 +243,6 @@
 		transform: scale(1.1);
 	}
 
-	:root[data-theme="umbreon"] .rank-badge.highlight {
-		color: #F4D03F;
-		text-shadow: 0 0 10px rgba(244, 208, 63, 0.5);
-	}
-
 	.alpha-badge.pulse {
 		animation: alphaPulse 1s ease infinite;
 	}
@@ -305,21 +261,12 @@
 		box-shadow: 0 2px 8px rgba(255, 183, 197, 0.3);
 	}
 
-	:root[data-theme="umbreon"] .stat-box.glow {
-		background: rgba(45, 27, 78, 0.5);
-		box-shadow: 0 2px 12px rgba(244, 208, 63, 0.3);
-	}
-
 	.encounter-count {
 		transition: color 0.3s ease;
 	}
 
 	.shiny-card:hover .encounter-count {
 		color: #FFB7C5;
-	}
-
-	:root[data-theme="umbreon"] .shiny-card:hover .encounter-count {
-		color: #F4D03F;
 	}
 
 	/* Shimmer animation for the top strip */
@@ -334,17 +281,63 @@
 		animation: shimmer 2s linear infinite;
 	}
 
-	:root[data-theme="umbreon"] .shimmer-bg {
-		background: linear-gradient(
-			90deg,
-			rgba(244, 208, 63, 0) 0%,
-			rgba(244, 208, 63, 0.8) 50%,
-			rgba(244, 208, 63, 0) 100%
-		);
-	}
-
 	@keyframes shimmer {
 		0% { background-position: -200% 0; }
 		100% { background-position: 200% 0; }
+	}
+
+	/* ── Umbreon Dark Mode Overrides ── */
+	:global([data-theme='umbreon']) .shiny-card {
+		background: linear-gradient(135deg, #09090F 0%, #111128 100%);
+		border-color: rgba(0, 191, 255, 0.2);
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .shiny-card:hover {
+		box-shadow: 0 12px 32px rgba(255, 215, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .shiny-card.legendary:hover {
+		box-shadow: 0 12px 32px rgba(255, 215, 0, 0.35), 0 4px 16px rgba(0, 0, 0, 0.5);
+		border-color: rgba(255, 215, 0, 0.6);
+	}
+
+	:global([data-theme='umbreon']) .shiny-card.epic:hover {
+		box-shadow: 0 12px 32px rgba(0, 191, 255, 0.3), 0 4px 16px rgba(0, 0, 0, 0.5);
+		border-color: rgba(0, 191, 255, 0.6);
+	}
+
+	:global([data-theme='umbreon']) .shiny-card.rare:hover {
+		box-shadow: 0 12px 32px rgba(0, 191, 255, 0.2), 0 4px 16px rgba(0, 0, 0, 0.4);
+	}
+
+	:global([data-theme='umbreon']) .rarity-glow.legendary {
+		background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.4) 0%, transparent 50%);
+	}
+
+	:global([data-theme='umbreon']) .rarity-glow.epic {
+		background: radial-gradient(circle at 30% 30%, rgba(0, 191, 255, 0.25) 0%, transparent 50%);
+	}
+
+	:global([data-theme='umbreon']) .rarity-glow.rare {
+		background: radial-gradient(circle at 30% 30%, rgba(0, 191, 255, 0.15) 0%, transparent 50%);
+	}
+
+	:global([data-theme='umbreon']) .rank-badge.highlight {
+		color: #00bfff;
+		text-shadow: 0 0 8px rgba(0, 191, 255, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .stat-box {
+		background: rgba(255, 255, 255, 0.04);
+	}
+
+	:global([data-theme='umbreon']) .stat-box.glow {
+		background: rgba(0, 191, 255, 0.07);
+		box-shadow: 0 2px 8px rgba(0, 191, 255, 0.15);
+	}
+
+	:global([data-theme='umbreon']) .shiny-card:hover .encounter-count {
+		color: #00bfff;
 	}
 </style>

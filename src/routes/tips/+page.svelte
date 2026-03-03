@@ -93,7 +93,7 @@
 	<p class="page-subheader">Guides for each hunting method in Pokémon Legends: Z-A</p>
 </div>
 
-!-- Method cards -->
+<!-- Method cards -->
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
 	{#each methods as method}
 		<div class="card border p-5 animate-fade-in transition-all duration-300"
@@ -101,15 +101,11 @@
 			class:border-base-300={$theme === 'sylveon'}
 			class:bg-umbreon-dark={$theme === 'umbreon'}
 			class:ring-border={$theme === 'umbreon'}>
-			!-- Header -->
+			<!-- Header -->
 			<div class="flex items-center gap-3 mb-3">
 				<span class="text-3xl">{method.icon}</span>
 				<div>
-					<h2 class="font-black text-lg transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
-						{method.name}
-					</h2>
+					<h2 class="font-black text-lg">{method.name}</h2>
 					<div class="flex gap-2 mt-0.5">
 						<span class="badge badge-sm" style="background-color: {method.color}; color: white; border: none;">
 							{method.difficulty}
@@ -119,10 +115,10 @@
 				</div>
 			</div>
 
-			!-- Description -->
+			<!-- Description -->
 			<p class="text-sm opacity-70 mb-3">{method.description}</p>
 
-			!-- Tips list -->
+			<!-- Tips list -->
 			<ul class="space-y-1.5">
 				{#each method.tips as tip}
 					<li class="flex gap-2 text-sm">
@@ -135,17 +131,13 @@
 	{/each}
 </div>
 
-!-- General tips -->
+<!-- General tips -->
 <div class="card border p-5 transition-all duration-300"
 	class:bg-base-100={$theme === 'sylveon'}
 	class:border-base-300={$theme === 'sylveon'}
 	class:bg-umbreon-dark={$theme === 'umbreon'}
 	class:ring-border={$theme === 'umbreon'}>
-	<h2 class="font-black text-lg mb-4 transition-colors duration-300"
-		class:text-dark-text={$theme === 'sylveon'}
-		class:text-umbreon-moon={$theme === 'umbreon'}>
-		🌟 General Tips
-	</h2>
+	<h2 class="font-black text-lg mb-4">🌟 General Tips</h2>
 	<div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
 		{#each generalTips as { icon, tip }}
 			<div class="flex gap-3 items-start">
@@ -156,36 +148,20 @@
 	</div>
 </div>
 
-!-- Odds reference table -->
+<!-- Odds reference table -->
 <div class="card border p-5 mt-4 transition-all duration-300"
 	class:bg-base-100={$theme === 'sylveon'}
 	class:border-base-300={$theme === 'sylveon'}
 	class:bg-umbreon-dark={$theme === 'umbreon'}
 	class:ring-border={$theme === 'umbreon'}>
-	<h2 class="font-black text-lg mb-4 transition-colors duration-300"
-		class:text-dark-text={$theme === 'sylveon'}
-		class:text-umbreon-moon={$theme === 'umbreon'}>
-		📊 Base Shiny Odds Reference
-	</h2>
+	<h2 class="font-black text-lg mb-4">📊 Base Shiny Odds Reference</h2>
 	<div class="overflow-x-auto">
 		<table class="table table-sm">
 			<thead>
 				<tr>
-					<th class="transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
-						Condition
-					</th>
-					<th class="text-right transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
-						Odds
-					</th>
-					<th class="text-right transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
-						~Chance %
-					</th>
+					<th>Condition</th>
+					<th class="text-right">Odds</th>
+					<th class="text-right">~Chance %</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -209,9 +185,7 @@
 					<td class="text-right font-mono">1 / 128</td>
 					<td class="text-right font-mono">0.781%</td>
 				</tr>
-				<tr class="font-bold transition-colors duration-300"
-					class:text-dark-text={$theme === 'sylveon'}
-					class:text-umbreon-yellow={$theme === 'umbreon'}>
+				<tr class="font-bold text-primary">
 					<td>Mass Outbreak + Perfect Entry</td>
 					<td class="text-right font-mono">1 / 64</td>
 					<td class="text-right font-mono">1.563%</td>

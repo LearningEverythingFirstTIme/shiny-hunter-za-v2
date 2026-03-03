@@ -19,17 +19,17 @@
 
 	function handleMouseMove(e: MouseEvent) {
 		if (!cardElement || compact) return;
-		
+
 		const rect = cardElement.getBoundingClientRect();
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
-		
+
 		const centerX = rect.width / 2;
 		const centerY = rect.height / 2;
-		
+
 		const rotateX = (y - centerY) / 10;
 		const rotateY = (centerX - x) / 10;
-		
+
 		cardElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.02)`;
 	}
 
@@ -75,17 +75,15 @@
 
 	<!-- Pokemon number -->
 	<div class="flex items-start justify-between mb-1 relative z-10">
-		<span class="text-xs opacity-40 font-mono font-bold pokemon-number transition-all duration-300" 
+		<span class="text-xs opacity-40 font-mono font-bold pokemon-number transition-all duration-300"
 			class:text-primary={isHovered}
 			class:opacity-100={isHovered}
-			class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}
 		>
 			#{paddedId}
 		</span>
 		{#if showShiny}
 			<span class="text-xs font-bold shiny-badge transition-all duration-300"
 				class:glow={isHovered}
-				class:text-umbreon-gold={$theme === 'umbreon'}
 			>✦ Shiny</span>
 		{/if}
 	</div>
@@ -107,14 +105,10 @@
 
 	<!-- Name -->
 	<p class="text-center font-semibold text-sm mb-1 truncate relative z-10 pokemon-name transition-all duration-300"
-		class:font-bold={isHovered}
-		class:text-dark-text={$theme === 'sylveon'}
-		class:text-umbreon-moon={$theme === 'umbreon'}
-		class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}
-	>
+		class:font-bold={isHovered}>
 		{pokemon.name}
 	</p>
-	
+
 	<!-- EVs -->
 	{#if pokemon.evs}
 		<p class="text-center text-xs text-white/50 mb-2 relative z-10">
@@ -153,11 +147,6 @@
 		border-color: #FFB7C5;
 	}
 
-	:root[data-theme="umbreon"] .card.enhanced:hover {
-		box-shadow: 0 12px 32px rgba(244, 208, 63, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
-		border-color: rgba(244, 208, 63, 0.6);
-	}
-
 	.card.enhanced::before {
 		content: '';
 		position: absolute;
@@ -169,14 +158,6 @@
 	}
 
 	:root[data-theme="sylveon"] .card.enhanced:hover::before {
-		opacity: 1;
-	}
-
-	:root[data-theme="umbreon"] .card.enhanced::before {
-		background: linear-gradient(135deg, rgba(244, 208, 63, 0.1) 0%, transparent 50%);
-	}
-
-	:root[data-theme="umbreon"] .card.enhanced:hover::before {
 		opacity: 1;
 	}
 
@@ -199,10 +180,6 @@
 		animation: shimmerText 1.5s ease infinite;
 	}
 
-	:root[data-theme="umbreon"] .shiny-badge.glow {
-		text-shadow: 0 0 10px rgba(244, 208, 63, 1), 0 0 20px rgba(244, 208, 63, 0.6), 0 0 30px rgba(244, 208, 63, 0.4);
-	}
-
 	@keyframes shimmerText {
 		0%, 100% { opacity: 1; }
 		50% { opacity: 0.7; }
@@ -214,11 +191,6 @@
 		animation: sparkleFade 1s ease-out forwards;
 	}
 
-	:root[data-theme="umbreon"] .shiny-sparkle-overlay {
-		background: radial-gradient(circle at 20% 30%, rgba(244, 208, 63, 0.4) 0%, transparent 30%),
-		            radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 30%);
-	}
-
 	@keyframes sparkleFade {
 		0% { opacity: 0; }
 		50% { opacity: 1; }
@@ -227,5 +199,32 @@
 
 	.hunt-btn {
 		transform-origin: center;
+	}
+
+	/* ── Umbreon Dark Mode Overrides ── */
+	:global([data-theme='umbreon']) .card.enhanced {
+		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .card.enhanced:hover {
+		box-shadow: 0 12px 32px rgba(0, 191, 255, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
+		border-color: rgba(0, 191, 255, 0.5);
+	}
+
+	:global([data-theme='umbreon']) .card.enhanced::before {
+		background: linear-gradient(135deg, rgba(0, 191, 255, 0.06) 0%, transparent 50%);
+	}
+
+	:global([data-theme='umbreon']) .card.enhanced:hover::before {
+		opacity: 1;
+	}
+
+	:global([data-theme='umbreon']) .shiny-sparkle-overlay {
+		background: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.25) 0%, transparent 30%),
+		            radial-gradient(circle at 80% 70%, rgba(0, 191, 255, 0.25) 0%, transparent 30%);
+	}
+
+	:global([data-theme='umbreon']) .pokemon-name.hovered {
+		color: #00bfff;
 	}
 </style>

@@ -7,6 +7,7 @@
 
 	let canvas: HTMLCanvasElement;
 	let chart: ChartType | null = null;
+	let mounted = false;
 
 	// Method colors mapping - consistent across themes
 	const methodColors: Record<string, string> = {
@@ -17,32 +18,34 @@
 		'Roaming': '#F08030'
 	};
 
-	// Theme-aware colors
-	$: borderColor = $theme === 'umbreon' ? '#1A1A2E' : '#FFF8F0';
-	$: legendColor = $theme === 'umbreon' ? '#E8E8E8' : '#2D1B2E';
-	$: tooltipBg = $theme === 'umbreon' ? '#2D1B4E' : '#2D1B2E';
-	$: tooltipText = $theme === 'umbreon' ? '#E8E8E8' : '#FFF8F0';
+	function getThemeColors(isDark: boolean) {
+		return {
+			legendColor: isDark ? '#B8CCF0' : '#2D1B2E',
+			tooltipBg: isDark ? '#1C1C2E' : '#2D1B2E',
+			tooltipText: isDark ? '#B8CCF0' : '#FFF8F0',
+			borderColor: isDark ? '#09090F' : '#FFF8F0'
+		};
+	}
 
-	async function initChart() {
+	async function initChart(isDark: boolean) {
 		if (!canvas || data.length === 0) return;
 
+		const colors = getThemeColors(isDark);
 		const { Chart, DoughnutController, ArcElement, Tooltip, Legend } = await import('chart.js');
 		Chart.register(DoughnutController, ArcElement, Tooltip, Legend);
 
-		const chartData = {
-			labels: data.map(d => d.method),
-			datasets: [{
-				data: data.map(d => d.count),
-				backgroundColor: data.map(d => methodColors[d.method] || ($theme === 'umbreon' ? '#F4D03F' : '#FFB7C5')),
-				borderColor: borderColor,
-				borderWidth: 3,
-				hoverOffset: 8
-			}]
-		};
-
 		chart = new Chart(canvas, {
 			type: 'doughnut',
-			data: chartData,
+			data: {
+				labels: data.map(d => d.method),
+				datasets: [{
+					data: data.map(d => d.count),
+					backgroundColor: data.map(d => methodColors[d.method] || (isDark ? '#00BFFF' : '#FFB7C5')),
+					borderColor: colors.borderColor,
+					borderWidth: 3,
+					hoverOffset: 8
+				}]
+			},
 			options: {
 				responsive: true,
 				maintainAspectRatio: false,
@@ -54,17 +57,14 @@
 							padding: 15,
 							usePointStyle: true,
 							pointStyle: 'circle',
-							font: {
-								size: 12,
-								family: "'Segoe UI', system-ui, sans-serif"
-							},
-							color: legendColor
+							font: { size: 12, family: "'Segoe UI', system-ui, sans-serif" },
+							color: colors.legendColor
 						}
 					},
 					tooltip: {
-						backgroundColor: tooltipBg,
-						titleColor: tooltipText,
-						bodyColor: tooltipText,
+						backgroundColor: colors.tooltipBg,
+						titleColor: colors.tooltipText,
+						bodyColor: colors.tooltipText,
 						padding: 12,
 						cornerRadius: 8,
 						callbacks: {
@@ -86,30 +86,20 @@
 	}
 
 	onMount(() => {
-		initChart();
+		mounted = true;
+		initChart($theme === 'umbreon');
 	});
 
 	onDestroy(() => {
-		if (chart) {
-			chart.destroy();
-		}
+		chart?.destroy();
 	});
 
-	// Update chart when data changes
-	$: if (chart && data) {
-		chart.data.labels = data.map(d => d.method);
-		chart.data.datasets[0].data = data.map(d => d.count);
-		chart.data.datasets[0].backgroundColor = data.map(d => methodColors[d.method] || ($theme === 'umbreon' ? '#F4D03F' : '#FFB7C5'));
-		chart.data.datasets[0].borderColor = borderColor;
-		if (chart.options.plugins?.legend?.labels) {
-			chart.options.plugins.legend.labels.color = legendColor;
-		}
-		if (chart.options.plugins?.tooltip) {
-			chart.options.plugins.tooltip.backgroundColor = tooltipBg;
-			chart.options.plugins.tooltip.titleColor = tooltipText;
-			chart.options.plugins.tooltip.bodyColor = tooltipText;
-		}
-		chart.update();
+	// Rebuild chart when theme or data changes
+	let prevTheme = $theme;
+	$: if (mounted && ($theme !== prevTheme || data)) {
+		prevTheme = $theme;
+		if (chart) { chart.destroy(); chart = null; }
+		initChart($theme === 'umbreon');
 	}
 </script>
 

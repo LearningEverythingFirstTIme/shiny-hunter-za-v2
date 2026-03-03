@@ -5,13 +5,18 @@
 		<link rel="icon" href="%sveltekit.assets%/favicon.svg" type="image/svg+xml" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<title>Shiny Hunter Z-A</title>
+		<!-- Prevent flash of unstyled content: apply saved theme before first paint -->
 		<script>
-			// Prevent flash of wrong theme - runs before page renders
-			(function() {
-				const saved = localStorage.getItem('theme');
-				const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-				const theme = saved || (prefersDark ? 'umbreon' : 'sylveon');
-				document.documentElement.setAttribute('data-theme', theme);
+			(function () {
+				try {
+					var saved = localStorage.getItem('shiny-hunter-theme');
+					var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+					var theme = saved === 'umbreon' ? 'umbreon'
+						: saved === 'sylveon' ? 'sylveon'
+						: prefersDark ? 'umbreon'
+						: 'sylveon';
+					document.documentElement.setAttribute('data-theme', theme);
+				} catch (e) {}
 			})();
 		</script>
 		%sveltekit.head%

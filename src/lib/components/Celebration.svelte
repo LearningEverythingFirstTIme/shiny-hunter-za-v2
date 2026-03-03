@@ -46,20 +46,23 @@
 	}
 
 	async function fireConfetti() {
+		const isDark = $theme === 'umbreon';
+		// Umbreon: neon blue rings + red eyes palette; Sylveon: pink + baby-blue + gold
+		const mainColors = isDark
+			? ['#00BFFF', '#1E8FFF', '#FF2424', '#33CFFF', '#0090CC', '#FFD700', '#ffffff']
+			: ['#FFB7C5', '#87CEEB', '#FFF8F0', '#FF69B4', '#ADD8E6', '#FFD700', '#ffffff'];
+		const burstColors = isDark
+			? ['#00BFFF', '#FF2424', '#FFD700']
+			: ['#FFB7C5', '#87CEEB', '#FFD700'];
+
 		try {
 			const confetti = (await import('canvas-confetti')).default;
-			
-			// Theme-aware confetti colors
-			const sylveonColors = ['#FFB7C5', '#87CEEB', '#FFF8F0', '#FF69B4', '#ADD8E6', '#FFD700', '#ffffff'];
-			const umbreonColors = ['#F4D03F', '#FFD700', '#C0C0C0', '#2D1B4E', '#1A1A2E', '#ffffff', '#E8E8E8'];
-			
-			const colors = $theme === 'umbreon' ? umbreonColors : sylveonColors;
-			
+
 			confetti({
 				particleCount: 120,
 				spread: 80,
 				origin: { y: 0.55 },
-				colors,
+				colors: mainColors,
 				shapes: ['circle', 'square'],
 				gravity: 0.9,
 				scalar: 1.1
@@ -70,14 +73,14 @@
 				angle: 60,
 				spread: 55,
 				origin: { x: 0, y: 0.65 },
-				colors
+				colors: burstColors
 			});
 			confetti({
 				particleCount: 40,
 				angle: 120,
 				spread: 55,
 				origin: { x: 1, y: 0.65 },
-				colors
+				colors: burstColors
 			});
 		} catch {
 			// confetti unavailable
@@ -87,8 +90,7 @@
 
 <!-- Overlay -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true"
-	class:bg-black0={$theme === 'sylveon'}
-	class:bg-black={$theme === 'umbreon'}>
+	class:bg-black={true}>
 	<!-- Backdrop -->
 	<button
 		class="absolute inset-0 backdrop-blur-sm"
@@ -107,21 +109,13 @@
 	<!-- Main card -->
 	{#if showStats}
 		<div
-			class="relative z-10 card shadow-2xl p-6 max-w-xs w-full text-center animate-fade-in transition-all duration-300"
-			class:bg-gradient-sylveon={$theme === 'sylveon'}
-			class:border-2={true}
-			class:border-sylveon-pink={$theme === 'sylveon'}
-			class:bg-gradient-umbreon={$theme === 'umbreon'}
-			class:ring-glow={$theme === 'umbreon'}
-			class:border-umbreon-yellow={$theme === 'umbreon'}>
+			class="relative z-10 card shadow-2xl p-6 max-w-xs w-full text-center animate-fade-in celebration-card"
+		>
 			<!-- Stars -->
 			<div class="absolute -top-3 left-1/2 -translate-x-1/2 text-2xl select-none"
 				class:animate-ring-pulse={$theme === 'umbreon'}>⭐</div>
 
-			<h2 class="text-2xl font-black mb-1 transition-colors duration-300"
-				class:text-dark-text={$theme === 'sylveon'}
-				class:text-umbreon-moon={$theme === 'umbreon'}
-				class:animate-ring-pulse={$theme === 'umbreon'}>
+			<h2 class="text-2xl font-black mb-1 text-base-content">
 				✨ Shiny Found! ✨
 			</h2>
 			<p class="text-sm opacity-60 mb-4">Congratulations, Trainer!</p>
@@ -138,18 +132,14 @@
 			</div>
 
 			<!-- Pokemon name -->
-			<p class="text-xl font-black mb-4 transition-colors duration-300"
-				class:text-dark-text={$theme === 'sylveon'}
-				class:text-umbreon-yellow={$theme === 'umbreon'}>
+			<p class="text-xl font-black mb-4 text-base-content">
 				{hunt.pokemonName}
 			</p>
 
 			<!-- Floating +1 SHINY! text (purely decorative) -->
 			<div class="relative h-8 overflow-hidden mb-2">
 				<p
-					class="absolute inset-x-0 top-0 text-center text-lg font-black animate-float-up transition-all duration-300"
-					class:text-umbreon-gold={$theme === 'umbreon'}
-					style={$theme === 'sylveon' ? 'color: #FFD700; text-shadow: 0 0 10px rgba(255,215,0,0.6);' : ''}
+					class="absolute inset-x-0 top-0 text-center text-lg font-black animate-float-up shiny-text"
 				>
 					+1 SHINY!
 				</p>
@@ -157,25 +147,15 @@
 
 			<!-- Hunt stats -->
 			<div class="grid grid-cols-2 gap-3 mb-5">
-				<div class="rounded-xl p-3 transition-colors duration-300"
-					class:bg-white={$theme === 'sylveon'}
-					class:bg-umbreon-purple={$theme === 'umbreon'}>
+				<div class="stat-box rounded-xl p-3">
 					<p class="text-xs opacity-50 font-medium">Encounters</p>
-					<p class="text-2xl font-black tabular-nums transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
+					<p class="text-2xl font-black tabular-nums text-base-content">
 						{hunt.encounters.toLocaleString()}
 					</p>
 				</div>
-				<div class="rounded-xl p-3 transition-colors duration-300"
-					class:bg-white={$theme === 'sylveon'}
-					class:bg-umbreon-purple={$theme === 'umbreon'}>
+				<div class="stat-box rounded-xl p-3">
 					<p class="text-xs opacity-50 font-medium">Duration</p>
-					<p class="text-2xl font-black transition-colors duration-300"
-						class:text-dark-text={$theme === 'sylveon'}
-						class:text-umbreon-moon={$theme === 'umbreon'}>
-						{durationDisplay}
-					</p>
+					<p class="text-2xl font-black text-base-content">{durationDisplay}</p>
 				</div>
 			</div>
 
@@ -200,14 +180,38 @@
 	}
 
 	.bg-radial-umbreon {
-		background: radial-gradient(ellipse at center, rgba(244,208,63,0.8) 0%, rgba(255,215,0,0.4) 40%, transparent 70%);
+		background: radial-gradient(ellipse at center, rgba(0,191,255,0.4) 0%, rgba(0,144,204,0.2) 40%, transparent 70%);
 	}
 
-	.bg-gradient-sylveon {
+	/* Light mode celebration card */
+	.celebration-card {
 		background: linear-gradient(145deg, #FFF8F0, #FFECF2);
+		border: 2px solid #FFB7C5;
 	}
 
-	.bg-gradient-umbreon {
-		background: linear-gradient(145deg, #1A1A2E, #2D1B4E);
+	.stat-box {
+		background: rgba(255, 255, 255, 0.7);
+	}
+
+	.shiny-text {
+		color: #FFD700;
+		text-shadow: 0 0 10px rgba(255, 215, 0, 0.6);
+	}
+
+	/* Umbreon dark mode */
+	:global([data-theme='umbreon']) .celebration-card {
+		background: linear-gradient(145deg, #111120, #1C1C2E);
+		border: 2px solid rgba(0, 191, 255, 0.4);
+		box-shadow: 0 0 40px rgba(0, 191, 255, 0.15), 0 25px 50px rgba(0, 0, 0, 0.6);
+	}
+
+	:global([data-theme='umbreon']) .stat-box {
+		background: rgba(0, 191, 255, 0.06);
+		border: 1px solid rgba(0, 191, 255, 0.12);
+	}
+
+	:global([data-theme='umbreon']) .shiny-text {
+		color: #00bfff;
+		text-shadow: 0 0 10px rgba(0, 191, 255, 0.8), 0 0 20px rgba(0, 191, 255, 0.4);
 	}
 </style>
