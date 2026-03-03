@@ -5,7 +5,8 @@
 	import { user, authLoading, signInWithGoogle } from '$lib/stores/auth';
 	import { subscribeHunts, unsubscribeHunts } from '$lib/stores/hunts';
 	import { subscribeShinies, unsubscribeShinies } from '$lib/stores/shinies';
-	import { onDestroy } from 'svelte';
+	import { theme } from '$lib/stores/theme';
+	import { onDestroy, onMount } from 'svelte';
 
 	let prevUserId: string | null = null;
 
@@ -24,6 +25,10 @@
 		}
 	}
 
+	onMount(() => {
+		theme.init();
+	});
+
 	onDestroy(() => {
 		unsubscribeHunts();
 		unsubscribeShinies();
@@ -32,7 +37,10 @@
 
 <ToastContainer />
 
-<div class="min-h-screen flex flex-col" style="background-color: #FFF8F0;">
+<div class="min-h-screen flex flex-col transition-colors duration-300"
+	class:bg-cream={$theme === 'sylveon'}
+	class:bg-umbreon-black={$theme === 'umbreon'}
+>
 	{#if $authLoading}
 		<!-- Loading screen -->
 		<div class="flex-1 flex items-center justify-center">
@@ -44,12 +52,23 @@
 	{:else if !$user}
 		<!-- Login screen -->
 		<div class="flex-1 flex items-center justify-center p-6">
-			<div class="card bg-base-100 shadow-2xl p-8 max-w-md w-full text-center border border-base-300">
+			<div class="card shadow-2xl p-8 max-w-md w-full text-center border transition-all duration-300"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}
+			>
 				<!-- Logo / header -->
 				<div class="text-7xl mb-4 select-none">
 					<span class="inline-block animate-pulse">✨</span>
 				</div>
-				<h1 class="text-3xl font-black mb-2" style="color: #2D1B2E;">Shiny Hunter Z-A</h1>
+				<h1 class="text-3xl font-black mb-2 transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}
+					class:animate-ring-pulse={$theme === 'umbreon'}
+				>
+					Shiny Hunter Z-A
+				</h1>
 				<p class="text-sm opacity-60 mb-8">
 					Track your shiny hunts in Pokémon Legends: Z-A
 				</p>
@@ -96,7 +115,10 @@
 		<main class="flex-1 container mx-auto max-w-6xl px-4 py-6">
 			<slot />
 		</main>
-		<footer class="text-center py-4 text-xs opacity-30 border-t border-base-300">
+		<footer class="text-center py-4 text-xs opacity-30 border-t transition-colors duration-300"
+			class:border-base-300={$theme === 'sylveon'}
+			class:border-umbreon-purple={$theme === 'umbreon'}
+		>
 			Shiny Hunter Z-A • Made with 💖 for Pokémon fans
 		</footer>
 	{/if}

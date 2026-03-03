@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { onMount, onDestroy } from 'svelte';
 	import type { Chart as ChartType } from 'chart.js';
+	import { theme } from '$lib/stores/theme';
 
 	export let data: { method: string; count: number; color: string }[] = [];
 
 	let canvas: HTMLCanvasElement;
 	let chart: ChartType | null = null;
 
-	// Method colors mapping
+	// Method colors mapping - consistent across themes
 	const methodColors: Record<string, string> = {
 		'Random Encounter': '#78C850',
 		'Mass Outbreak': '#6890F0',
@@ -15,6 +16,12 @@
 		'Dex Research': '#A890F0',
 		'Roaming': '#F08030'
 	};
+
+	// Theme-aware colors
+	$: borderColor = $theme === 'umbreon' ? '#1A1A2E' : '#FFF8F0';
+	$: legendColor = $theme === 'umbreon' ? '#E8E8E8' : '#2D1B2E';
+	$: tooltipBg = $theme === 'umbreon' ? '#2D1B4E' : '#2D1B2E';
+	$: tooltipText = $theme === 'umbreon' ? '#E8E8E8' : '#FFF8F0';
 
 	async function initChart() {
 		if (!canvas || data.length === 0) return;
@@ -26,8 +33,8 @@
 			labels: data.map(d => d.method),
 			datasets: [{
 				data: data.map(d => d.count),
-				backgroundColor: data.map(d => methodColors[d.method] || '#FFB7C5'),
-				borderColor: '#FFF8F0',
+				backgroundColor: data.map(d => methodColors[d.method] || ($theme === 'umbreon' ? '#F4D03F' : '#FFB7C5')),
+				borderColor: borderColor,
 				borderWidth: 3,
 				hoverOffset: 8
 			}]
@@ -51,13 +58,13 @@
 								size: 12,
 								family: "'Segoe UI', system-ui, sans-serif"
 							},
-							color: '#2D1B2E'
+							color: legendColor
 						}
 					},
 					tooltip: {
-						backgroundColor: '#2D1B2E',
-						titleColor: '#FFF8F0',
-						bodyColor: '#FFF8F0',
+						backgroundColor: tooltipBg,
+						titleColor: tooltipText,
+						bodyColor: tooltipText,
 						padding: 12,
 						cornerRadius: 8,
 						callbacks: {
@@ -92,7 +99,16 @@
 	$: if (chart && data) {
 		chart.data.labels = data.map(d => d.method);
 		chart.data.datasets[0].data = data.map(d => d.count);
-		chart.data.datasets[0].backgroundColor = data.map(d => methodColors[d.method] || '#FFB7C5');
+		chart.data.datasets[0].backgroundColor = data.map(d => methodColors[d.method] || ($theme === 'umbreon' ? '#F4D03F' : '#FFB7C5'));
+		chart.data.datasets[0].borderColor = borderColor;
+		if (chart.options.plugins?.legend?.labels) {
+			chart.options.plugins.legend.labels.color = legendColor;
+		}
+		if (chart.options.plugins?.tooltip) {
+			chart.options.plugins.tooltip.backgroundColor = tooltipBg;
+			chart.options.plugins.tooltip.titleColor = tooltipText;
+			chart.options.plugins.tooltip.bodyColor = tooltipText;
+		}
 		chart.update();
 	}
 </script>

@@ -3,6 +3,7 @@
 	import HuntCard from '$lib/components/HuntCard.svelte';
 	import Celebration from '$lib/components/Celebration.svelte';
 	import { EmptyHunts } from '$lib/components/illustrations';
+	import { theme } from '$lib/stores/theme';
 	import type { Hunt } from '$lib/types';
 
 	let celebrationHunt: Hunt | null = null;
@@ -23,7 +24,9 @@
 
 {#if $huntsLoading}
 	<div class="flex justify-center py-16">
-		<span class="loading loading-dots loading-lg" style="color: #FFB7C5;"></span>
+		<span class="loading loading-dots loading-lg transition-colors duration-300"
+			class:text-sylveon-pink={$theme === 'sylveon'}
+			class:text-umbreon-yellow={$theme === 'umbreon'}></span>
 	</div>
 {:else if $hunts.length === 0}
 	<div class="flex flex-col items-center py-12">
@@ -47,7 +50,7 @@
 	</div>
 {/if}
 
-<!-- Celebration overlay -->
+!-- Celebration overlay -->
 {#if celebrationHunt}
 	<Celebration
 		hunt={celebrationHunt}

@@ -2,6 +2,7 @@
 	import type { Pokemon } from '$lib/types';
 	import { getSpriteUrl, getShinySpriteUrl, formatEVs } from '$lib/data/pokemon';
 	import { createEventDispatcher } from 'svelte';
+	import { theme } from '$lib/stores/theme';
 
 	export let pokemon: Pokemon;
 	export let showShiny = false;
@@ -51,7 +52,11 @@
 
 <div
 	bind:this={cardElement}
-	class="card bg-base-100 border border-base-300 cursor-default animate-fade-in overflow-hidden relative"
+	class="card border cursor-default animate-fade-in overflow-hidden relative transition-all duration-300"
+	class:bg-base-100={$theme === 'sylveon'}
+	class:border-base-300={$theme === 'sylveon'}
+	class:bg-umbreon-dark={$theme === 'umbreon'}
+	class:ring-border={$theme === 'umbreon'}
 	class:p-3={compact}
 	class:p-4={!compact}
 	class:compact={compact}
@@ -72,11 +77,16 @@
 	<div class="flex items-start justify-between mb-1 relative z-10">
 		<span class="text-xs opacity-40 font-mono font-bold pokemon-number transition-all duration-300" 
 			class:text-primary={isHovered}
-			class:opacity-100={isHovered}>
+			class:opacity-100={isHovered}
+			class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}
+		>
 			#{paddedId}
 		</span>
 		{#if showShiny}
-			<span class="text-xs font-bold shiny-badge" class:glow={isHovered}>✦ Shiny</span>
+			<span class="text-xs font-bold shiny-badge transition-all duration-300"
+				class:glow={isHovered}
+				class:text-umbreon-gold={$theme === 'umbreon'}
+			>✦ Shiny</span>
 		{/if}
 	</div>
 
@@ -98,7 +108,10 @@
 	<!-- Name -->
 	<p class="text-center font-semibold text-sm mb-1 truncate relative z-10 pokemon-name transition-all duration-300"
 		class:font-bold={isHovered}
-		style="color: #2D1B2E;">
+		class:text-dark-text={$theme === 'sylveon'}
+		class:text-umbreon-moon={$theme === 'umbreon'}
+		class:text-umbreon-yellow={isHovered && $theme === 'umbreon'}
+	>
 		{pokemon.name}
 	</p>
 	
@@ -113,7 +126,8 @@
 	<div class="flex justify-center gap-1 flex-wrap mb-3 relative z-10">
 		{#each pokemon.types as type}
 			<span class="type-badge type-{type} transition-all duration-300"
-				class:scale-110={isHovered}>{type}</span>
+				class:scale-110={isHovered}
+			>{type}</span>
 		{/each}
 	</div>
 
@@ -134,9 +148,14 @@
 		box-shadow: 0 2px 8px rgba(45, 27, 46, 0.08);
 	}
 
-	.card.enhanced:hover {
+	:root[data-theme="sylveon"] .card.enhanced:hover {
 		box-shadow: 0 12px 32px rgba(255, 183, 197, 0.35), 0 4px 16px rgba(45, 27, 46, 0.12);
 		border-color: #FFB7C5;
+	}
+
+	:root[data-theme="umbreon"] .card.enhanced:hover {
+		box-shadow: 0 12px 32px rgba(244, 208, 63, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
+		border-color: rgba(244, 208, 63, 0.6);
 	}
 
 	.card.enhanced::before {
@@ -149,7 +168,15 @@
 		pointer-events: none;
 	}
 
-	.card.enhanced:hover::before {
+	:root[data-theme="sylveon"] .card.enhanced:hover::before {
+		opacity: 1;
+	}
+
+	:root[data-theme="umbreon"] .card.enhanced::before {
+		background: linear-gradient(135deg, rgba(244, 208, 63, 0.1) 0%, transparent 50%);
+	}
+
+	:root[data-theme="umbreon"] .card.enhanced:hover::before {
 		opacity: 1;
 	}
 
@@ -172,6 +199,10 @@
 		animation: shimmerText 1.5s ease infinite;
 	}
 
+	:root[data-theme="umbreon"] .shiny-badge.glow {
+		text-shadow: 0 0 10px rgba(244, 208, 63, 1), 0 0 20px rgba(244, 208, 63, 0.6), 0 0 30px rgba(244, 208, 63, 0.4);
+	}
+
 	@keyframes shimmerText {
 		0%, 100% { opacity: 1; }
 		50% { opacity: 0.7; }
@@ -181,6 +212,11 @@
 		background: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.3) 0%, transparent 30%),
 		            radial-gradient(circle at 80% 70%, rgba(255, 183, 197, 0.3) 0%, transparent 30%);
 		animation: sparkleFade 1s ease-out forwards;
+	}
+
+	:root[data-theme="umbreon"] .shiny-sparkle-overlay {
+		background: radial-gradient(circle at 20% 30%, rgba(244, 208, 63, 0.4) 0%, transparent 30%),
+		            radial-gradient(circle at 80% 70%, rgba(255, 215, 0, 0.3) 0%, transparent 30%);
 	}
 
 	@keyframes sparkleFade {

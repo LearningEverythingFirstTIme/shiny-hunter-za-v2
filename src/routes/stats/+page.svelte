@@ -3,6 +3,7 @@
 	import { hunts } from '$lib/stores/hunts';
 	import MethodChart from '$lib/components/MethodChart.svelte';
 	import { EmptyStats } from '$lib/components/illustrations';
+	import { theme } from '$lib/stores/theme';
 
 	function formatMinutes(min: number): string {
 		if (min < 60) return `${min}m`;
@@ -29,19 +30,25 @@
 		return Object.entries(counts).sort((a, b) => b[1] - a[1]);
 	})();
 
-	// Chart data format
+	// Chart data format - theme aware colors
 	$: chartData = methodBreakdown.map(([method, count]) => ({
 		method,
 		count,
-		color: '#FFB7C5'
+		color: $theme === 'umbreon' ? '#F4D03F' : '#FFB7C5'
 	}));
 
 	$: alphaCount = $shinies.filter((s) => s.isAlpha).length;
 
-	// Calculate encounter distribution
+	// Calculate encounter distribution - theme aware
 	$: encounterDistribution = (() => {
 		if ($shinies.length === 0) return [];
-		const ranges = [
+		const ranges = $theme === 'umbreon' ? [
+			{ label: '< 100', min: 0, max: 100, color: '#2ECC71' },
+			{ label: '100-500', min: 100, max: 500, color: '#6B5B95' },
+			{ label: '500-1k', min: 500, max: 1000, color: '#F4D03F' },
+			{ label: '1k-2k', min: 1000, max: 2000, color: '#E74C3C' },
+			{ label: '2k+', min: 2000, max: Infinity, color: '#FFD700' }
+		] : [
 			{ label: '< 100', min: 0, max: 100, color: '#86efac' },
 			{ label: '100-500', min: 100, max: 500, color: '#87CEEB' },
 			{ label: '500-1k', min: 500, max: 1000, color: '#FFB7C5' },
@@ -71,36 +78,74 @@
 		<a href="/pokedex" class="btn btn-primary font-bold mt-4">📖 Go to Pokédex</a>
 	</div>
 {:else}
-	<!-- Overview stats -->
+	!-- Overview stats -->
 	<div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-		<div class="stat-card bg-base-100 border border-base-300 rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+		<div class="stat-card border rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+			class:bg-base-100={$theme === 'sylveon'}
+			class:border-base-300={$theme === 'sylveon'}
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:ring-border={$theme === 'umbreon'}>
 			<div class="stat-figure text-3xl mb-1">✨</div>
 			<div class="stat-title text-xs opacity-60">Total Shinies</div>
-			<div class="stat-value text-3xl font-black" style="color: #2D1B2E;">{$stats.totalShinies}</div>
+			<div class="stat-value text-3xl font-black transition-colors duration-300"
+				class:text-dark-text={$theme === 'sylveon'}
+				class:text-umbreon-moon={$theme === 'umbreon'}>
+				{$stats.totalShinies}
+			</div>
 		</div>
-		<div class="stat-card bg-base-100 border border-base-300 rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+		<div class="stat-card border rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+			class:bg-base-100={$theme === 'sylveon'}
+			class:border-base-300={$theme === 'sylveon'}
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:ring-border={$theme === 'umbreon'}>
 			<div class="stat-figure text-3xl mb-1">⚔️</div>
 			<div class="stat-title text-xs opacity-60">Total Encounters</div>
-			<div class="stat-value text-2xl font-black" style="color: #2D1B2E;">{$stats.totalEncounters.toLocaleString()}</div>
+			<div class="stat-value text-2xl font-black transition-colors duration-300"
+				class:text-dark-text={$theme === 'sylveon'}
+				class:text-umbreon-moon={$theme === 'umbreon'}>
+				{$stats.totalEncounters.toLocaleString()}
+			</div>
 		</div>
-		<div class="stat-card bg-base-100 border border-base-300 rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+		<div class="stat-card border rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+			class:bg-base-100={$theme === 'sylveon'}
+			class:border-base-300={$theme === 'sylveon'}
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:ring-border={$theme === 'umbreon'}>
 			<div class="stat-figure text-3xl mb-1">🎯</div>
 			<div class="stat-title text-xs opacity-60">Active Hunts</div>
-			<div class="stat-value text-3xl font-black" style="color: #2D1B2E;">{$hunts.length}</div>
+			<div class="stat-value text-3xl font-black transition-colors duration-300"
+				class:text-dark-text={$theme === 'sylveon'}
+				class:text-umbreon-moon={$theme === 'umbreon'}>
+				{$hunts.length}
+			</div>
 		</div>
-		<div class="stat-card bg-base-100 border border-base-300 rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1">
+		<div class="stat-card border rounded-2xl py-4 px-5 transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+			class:bg-base-100={$theme === 'sylveon'}
+			class:border-base-300={$theme === 'sylveon'}
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:ring-border={$theme === 'umbreon'}>
 			<div class="stat-figure text-3xl mb-1">⏱️</div>
 			<div class="stat-title text-xs opacity-60">Total Hunt Time</div>
-			<div class="stat-value text-2xl font-black" style="color: #2D1B2E;">{formatMinutes($stats.totalHuntTime)}</div>
+			<div class="stat-value text-2xl font-black transition-colors duration-300"
+				class:text-dark-text={$theme === 'sylveon'}
+				class:text-umbreon-moon={$theme === 'umbreon'}>
+				{formatMinutes($stats.totalHuntTime)}
+			</div>
 		</div>
 	</div>
 
 	{#if $stats.totalShinies > 0}
-		<!-- Charts section -->
+		!-- Charts section -->
 		<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-			<!-- Method breakdown chart -->
-			<div class="card bg-base-100 border border-base-300 p-5 chart-card transition-all duration-300 hover:shadow-lg">
-				<h3 class="font-bold mb-4 flex items-center gap-2" style="color: #2D1B2E;">
+			!-- Method breakdown chart -->
+			<div class="card border p-5 chart-card transition-all duration-300 hover:shadow-lg"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}>
+				<h3 class="font-bold mb-4 flex items-center gap-2 transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
 					<span>🎯</span> Method Breakdown
 				</h3>
 				{#if chartData.length > 0}
@@ -112,9 +157,15 @@
 				{/if}
 			</div>
 
-			<!-- Encounter distribution -->
-			<div class="card bg-base-100 border border-base-300 p-5 chart-card transition-all duration-300 hover:shadow-lg">
-				<h3 class="font-bold mb-4 flex items-center gap-2" style="color: #2D1B2E;">
+			!-- Encounter distribution -->
+			<div class="card border p-5 chart-card transition-all duration-300 hover:shadow-lg"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}>
+				<h3 class="font-bold mb-4 flex items-center gap-2 transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
 					<span>📈</span> Encounter Distribution
 				</h3>
 				{#if encounterDistribution.length > 0}
@@ -124,9 +175,10 @@
 							{@const pct = Math.round((range.count / total) * 100)}
 							<div class="flex items-center gap-3">
 								<span class="text-xs font-medium w-16">{range.label}</span>
-								<div class="flex-1 h-3 bg-base-200 rounded-full overflow-hidden">
+								<div class="flex-1 h-3 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple/20={$theme === 'umbreon'}>
 									<div class="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden"
-										style="width: {pct}%; background-color: {range.color};">
+										style="width: {pct}%; background-color: {range.color};"
+										class:shadow-glow={$theme === 'umbreon'}>
 										<div class="absolute inset-0 shimmer-effect"></div>
 									</div>
 								</div>
@@ -146,34 +198,69 @@
 			</div>
 		</div>
 
-		<!-- Secondary stats -->
+		!-- Secondary stats -->
 		<div class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-			<div class="card bg-base-100 border border-base-300 p-4 secondary-stat transition-all duration-300 hover:shadow-md hover:border-primary/30">
+			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:hover:border-primary/30={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}
+				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">AVG. ENCOUNTERS</p>
-				<p class="text-2xl font-black" style="color: #2D1B2E;">{$stats.averageEncounters.toLocaleString()}</p>
+				<p class="text-2xl font-black transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
+					{$stats.averageEncounters.toLocaleString()}
+				</p>
 				<p class="text-xs opacity-40 mt-1">per shiny</p>
 			</div>
-			<div class="card bg-base-100 border border-base-300 p-4 secondary-stat transition-all duration-300 hover:shadow-md hover:border-warning/30">
+			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:hover:border-warning/30={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}
+				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">ALPHA SHINIES</p>
-				<p class="text-2xl font-black" style="color: #2D1B2E;">{alphaCount}</p>
+				<p class="text-2xl font-black transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
+					{alphaCount}
+				</p>
 				<p class="text-xs opacity-40 mt-1">
 					{$stats.totalShinies > 0 ? Math.round((alphaCount / $stats.totalShinies) * 100) : 0}% of total
 				</p>
 			</div>
-			<div class="card bg-base-100 border border-base-300 p-4 secondary-stat transition-all duration-300 hover:shadow-md hover:border-secondary/30">
+			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:hover:border-secondary/30={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}
+				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">FAVORITE METHOD</p>
-				<p class="text-lg font-black leading-tight" style="color: #2D1B2E;">{$stats.favoriteMethod ?? '—'}</p>
+				<p class="text-lg font-black leading-tight transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
+					{$stats.favoriteMethod ?? '—'}
+				</p>
 				<p class="text-xs opacity-40 mt-1">most used</p>
 			</div>
 		</div>
 
-		<!-- Luckiest / Rarest -->
+		!-- Luckiest / Rarest -->
 		<div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-			<!-- Luckiest -->
+			!-- Luckiest -->
 			{#if $stats.luckiest}
-				<div class="card bg-base-100 border-2 p-4 luckiest-card transition-all duration-300 hover:shadow-lg" 
-					style="border-color: #87CEEB;">
-					<p class="text-xs font-bold mb-3 flex items-center gap-1" style="color: #87CEEB;">
+				<div class="card border-2 p-4 luckiest-card transition-all duration-300 hover:shadow-lg"
+					class:bg-base-100={$theme === 'sylveon'}
+					class:border-sylveon-blue={$theme === 'sylveon'}
+					class:bg-umbreon-dark={$theme === 'umbreon'}
+					class:border-umbreon-silver={$theme === 'umbreon'}>
+					<p class="text-xs font-bold mb-3 flex items-center gap-1 transition-colors duration-300"
+						class:text-sylveon-blue={$theme === 'sylveon'}
+						class:text-umbreon-silver={$theme === 'umbreon'}>
 						<span>🍀</span> LUCKIEST HUNT
 					</p>
 					<div class="flex items-center gap-3">
@@ -187,9 +274,15 @@
 							/>
 						</div>
 						<div>
-							<p class="font-bold" style="color: #2D1B2E;">{$stats.luckiest.pokemonName}</p>
+							<p class="font-bold transition-colors duration-300"
+								class:text-dark-text={$theme === 'sylveon'}
+								class:text-umbreon-moon={$theme === 'umbreon'}>
+								{$stats.luckiest.pokemonName}
+							</p>
 							<p class="text-sm opacity-60">{$stats.luckiest.method}</p>
-							<p class="text-xl font-black tabular-nums" style="color: #2D1B2E;">
+							<p class="text-xl font-black tabular-nums transition-colors duration-300"
+								class:text-dark-text={$theme === 'sylveon'}
+								class:text-umbreon-moon={$theme === 'umbreon'}>
 								{$stats.luckiest.encounters.toLocaleString()} enc.
 							</p>
 						</div>
@@ -197,11 +290,16 @@
 				</div>
 			{/if}
 
-			<!-- Rarest -->
+			!-- Rarest -->
 			{#if $stats.rarest}
-				<div class="card bg-base-100 border-2 p-4 rarest-card transition-all duration-300 hover:shadow-lg" 
-					style="border-color: #FFD700;">
-					<p class="text-xs font-bold mb-3 flex items-center gap-1" style="color: #B8860B;">
+				<div class="card border-2 p-4 rarest-card transition-all duration-300 hover:shadow-lg"
+					class:bg-base-100={$theme === 'sylveon'}
+					class:border-umbreon-gold={$theme === 'sylveon'}
+					class:bg-umbreon-dark={$theme === 'umbreon'}
+					class:border-umbreon-yellow={$theme === 'umbreon'}>
+					<p class="text-xs font-bold mb-3 flex items-center gap-1 transition-colors duration-300"
+						class:text-umbreon-gold={$theme === 'sylveon'}
+						class:text-umbreon-yellow={$theme === 'umbreon'}>
 						<span>💎</span> RAREST HUNT
 					</p>
 					<div class="flex items-center gap-3">
@@ -215,9 +313,15 @@
 							/>
 						</div>
 						<div>
-							<p class="font-bold" style="color: #2D1B2E;">{$stats.rarest.pokemonName}</p>
+							<p class="font-bold transition-colors duration-300"
+								class:text-dark-text={$theme === 'sylveon'}
+								class:text-umbreon-moon={$theme === 'umbreon'}>
+								{$stats.rarest.pokemonName}
+							</p>
 							<p class="text-sm opacity-60">{$stats.rarest.method}</p>
-							<p class="text-xl font-black tabular-nums" style="color: #2D1B2E;">
+							<p class="text-xl font-black tabular-nums transition-colors duration-300"
+								class:text-dark-text={$theme === 'sylveon'}
+								class:text-umbreon-moon={$theme === 'umbreon'}>
 								{$stats.rarest.encounters.toLocaleString()} enc.
 							</p>
 						</div>
@@ -226,19 +330,31 @@
 			{/if}
 		</div>
 
-		<!-- Method breakdown -->
+		!-- Method breakdown -->
 		{#if methodBreakdown.length > 0}
-			<div class="card bg-base-100 border border-base-300 p-5 method-list-card">
-				<h3 class="font-bold mb-4" style="color: #2D1B2E;">Method Breakdown</h3>
+			<div class="card border p-5 method-list-card transition-all duration-300"
+				class:bg-base-100={$theme === 'sylveon'}
+				class:border-base-300={$theme === 'sylveon'}
+				class:bg-umbreon-dark={$theme === 'umbreon'}
+				class:ring-border={$theme === 'umbreon'}>
+				<h3 class="font-bold mb-4 transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
+					Method Breakdown
+				</h3>
 				<div class="space-y-3">
 					{#each methodBreakdown as [method, count]}
 						{@const pct = Math.round((count / $stats.totalShinies) * 100)}
 						<div class="method-row group">
 							<div class="flex justify-between text-sm mb-1">
-								<span class="font-medium group-hover:text-primary transition-colors">{method}</span>
+								<span class="font-medium transition-colors duration-300"
+									class:group-hover:text-primary={$theme === 'sylveon'}
+									class:group-hover:text-umbreon-yellow={$theme === 'umbreon'}>
+									{method}
+								</span>
 								<span class="opacity-60">{count} ({pct}%)</span>
 							</div>
-							<div class="h-2 bg-base-200 rounded-full overflow-hidden">
+							<div class="h-2 rounded-full overflow-hidden transition-colors duration-300" class:bg-base-200={$theme === 'sylveon'} class:bg-umbreon-purple/20={$theme === 'umbreon'}>
 								<div class="h-full rounded-full progress-fill transition-all duration-500 relative overflow-hidden"
 									style="width: {pct}%;">
 									<div class="absolute inset-0 shimmer-effect"></div>
@@ -270,30 +386,52 @@
 		transition: opacity 0.3s ease;
 	}
 
+	:root[data-theme="umbreon"] .stat-card::before {
+		background: linear-gradient(90deg, #F4D03F, #FFD700);
+	}
+
 	.stat-card:hover::before {
 		opacity: 1;
 	}
 
-	.stat-card:hover {
+	:root[data-theme="sylveon"] .stat-card:hover {
 		border-color: #FFB7C5;
 	}
 
-	.chart-card:hover {
+	:root[data-theme="umbreon"] .stat-card:hover {
+		border-color: rgba(244, 208, 63, 0.5);
+	}
+
+	:root[data-theme="sylveon"] .chart-card:hover {
 		border-color: #FFB7C5;
+	}
+
+	:root[data-theme="umbreon"] .chart-card:hover {
+		border-color: rgba(244, 208, 63, 0.5);
 	}
 
 	.secondary-stat:hover {
 		transform: translateY(-2px);
 	}
 
-	.luckiest-card:hover {
+	:root[data-theme="sylveon"] .luckiest-card:hover {
 		transform: translateY(-4px);
 		box-shadow: 0 12px 24px rgba(135, 206, 235, 0.25);
 	}
 
-	.rarest-card:hover {
+	:root[data-theme="umbreon"] .luckiest-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 24px rgba(192, 192, 192, 0.2);
+	}
+
+	:root[data-theme="sylveon"] .rarest-card:hover {
 		transform: translateY(-4px);
 		box-shadow: 0 12px 24px rgba(255, 215, 0, 0.25);
+	}
+
+	:root[data-theme="umbreon"] .rarest-card:hover {
+		transform: translateY(-4px);
+		box-shadow: 0 12px 24px rgba(244, 208, 63, 0.3);
 	}
 
 	.sprite-wrapper {
@@ -324,19 +462,33 @@
 		100% { transform: translateX(100%); }
 	}
 
-	.method-row:hover .progress-fill {
+	:root[data-theme="sylveon"] .method-row:hover .progress-fill {
 		background: linear-gradient(90deg, #FFB7C5, #FF91A4);
 	}
 
-	.progress-fill {
+	:root[data-theme="umbreon"] .method-row:hover .progress-fill {
+		background: linear-gradient(90deg, #F4D03F, #FFD700);
+		box-shadow: 0 0 10px rgba(244, 208, 63, 0.3);
+	}
+
+	:root[data-theme="sylveon"] .progress-fill {
 		background: linear-gradient(90deg, #FFB7C5, #87CEEB);
 	}
 
-	.method-list-card {
-		transition: all 0.3s ease;
+	:root[data-theme="umbreon"] .progress-fill {
+		background: linear-gradient(90deg, #F4D03F, #C0C0C0);
 	}
 
 	.method-list-card:hover {
 		box-shadow: 0 4px 16px rgba(255, 183, 197, 0.15);
+	}
+
+	:root[data-theme="umbreon"] .method-list-card:hover {
+		box-shadow: 0 4px 16px rgba(244, 208, 63, 0.1);
+	}
+
+	/* Umbreon glow effect */
+	:root[data-theme="umbreon"] .shadow-glow {
+		box-shadow: 0 0 10px rgba(244, 208, 63, 0.4);
 	}
 </style>

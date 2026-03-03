@@ -2,6 +2,7 @@
 	import { shinies, shiniesLoading } from '$lib/stores/shinies';
 	import ShinyCard from '$lib/components/ShinyCard.svelte';
 	import { EmptyShinies } from '$lib/components/illustrations';
+	import { theme } from '$lib/stores/theme';
 
 	let sortBy: 'date' | 'encounters' | 'name' = 'date';
 
@@ -24,7 +25,7 @@
 		</p>
 	</div>
 
-	<!-- Sort control -->
+	!-- Sort control -->
 	{#if $shinies.length > 1}
 		<div class="flex items-center gap-2">
 			<span class="text-sm font-medium opacity-60">Sort:</span>
@@ -60,7 +61,9 @@
 
 {#if $shiniesLoading}
 	<div class="flex justify-center py-16">
-		<span class="loading loading-dots loading-lg" style="color: #FFB7C5;"></span>
+		<span class="loading loading-dots loading-lg transition-colors duration-300"
+			class:text-sylveon-pink={$theme === 'sylveon'}
+			class:text-umbreon-yellow={$theme === 'umbreon'}></span>
 	</div>
 {:else if $shinies.length === 0}
 	<div class="flex flex-col items-center py-12">

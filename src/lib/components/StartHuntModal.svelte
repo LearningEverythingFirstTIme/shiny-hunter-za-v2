@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Pokemon, HuntMethod } from '$lib/types';
 	import { HUNT_METHODS, getShinySpriteUrl } from '$lib/data/pokemon';
+	import { theme } from '$lib/stores/theme';
 
 	export let pokemon: Pokemon;
 
@@ -11,20 +12,31 @@
 </script>
 
 <!-- Backdrop -->
-<div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+<div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true"
+	class:bg-black/40={$theme === 'sylveon'}
+	class:bg-black/60={$theme === 'umbreon'}>
 	<button
-		class="absolute inset-0 bg-black/40 backdrop-blur-sm"
+		class="absolute inset-0 backdrop-blur-sm transition-colors duration-300"
 		on:click={() => dispatch('close')}
 		aria-label="Close modal"
 	></button>
 
 	<div
-		class="relative z-10 card bg-base-100 shadow-2xl p-6 max-w-sm w-full border border-base-300 animate-fade-in"
-	>
-		<h3 class="text-xl font-black mb-4" style="color: #2D1B2E;">Start Shiny Hunt</h3>
+		class="relative z-10 card shadow-2xl p-6 max-w-sm w-full animate-fade-in transition-all duration-300"
+		class:bg-base-100={$theme === 'sylveon'}
+		class:border-base-300={$theme === 'sylveon'}
+		class:bg-umbreon-dark={$theme === 'umbreon'}
+		class:ring-border={$theme === 'umbreon'}>
+		<h3 class="text-xl font-black mb-4 transition-colors duration-300"
+			class:text-dark-text={$theme === 'sylveon'}
+			class:text-umbreon-moon={$theme === 'umbreon'}>
+			Start Shiny Hunt
+		</h3>
 
 		<!-- Pokemon info -->
-		<div class="flex items-center gap-4 mb-5 p-3 rounded-xl bg-base-200">
+		<div class="flex items-center gap-4 mb-5 p-3 rounded-xl transition-colors duration-300"
+			class:bg-base-200={$theme === 'sylveon'}
+			class:bg-umbreon-purple/20={$theme === 'umbreon'}>
 			<img
 				src={getShinySpriteUrl(pokemon.nationalId)}
 				alt={pokemon.name}
@@ -33,7 +45,11 @@
 				class="shiny-glow"
 			/>
 			<div>
-				<p class="font-bold text-lg" style="color: #2D1B2E;">{pokemon.name}</p>
+				<p class="font-bold text-lg transition-colors duration-300"
+					class:text-dark-text={$theme === 'sylveon'}
+					class:text-umbreon-moon={$theme === 'umbreon'}>
+					{pokemon.name}
+				</p>
 				<div class="flex gap-1 flex-wrap mt-1">
 					{#each pokemon.types as type}
 						<span class="type-badge type-{type}">{type}</span>
@@ -44,13 +60,19 @@
 
 		<!-- Method selection -->
 		<label class="label" for="method-select">
-			<span class="label-text font-semibold">Hunt Method</span>
+			<span class="label-text font-semibold transition-colors duration-300"
+				class:text-dark-text={$theme === 'sylveon'}
+				class:text-umbreon-moon={$theme === 'umbreon'}>
+				Hunt Method
+			</span>
 		</label>
 		<select
 			id="method-select"
 			bind:value={selectedMethod}
-			class="select select-bordered w-full mb-5"
-		>
+			class="select select-bordered w-full mb-5 transition-colors duration-300"
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:border-umbreon-purple={$theme === 'umbreon'}
+			class:text-umbreon-moon={$theme === 'umbreon'}>
 			{#each HUNT_METHODS as method}
 				<option value={method}>{method}</option>
 			{/each}
@@ -62,7 +84,7 @@
 			<button
 				class="btn btn-primary flex-[2] font-bold"
 				on:click={() => dispatch('start', { method: selectedMethod })}
-			>
+	003e
 				🎯 Start Hunt
 			</button>
 		</div>

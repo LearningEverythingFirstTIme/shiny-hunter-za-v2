@@ -6,6 +6,7 @@
 	import { user } from '$lib/stores/auth';
 	import { startHunt } from '$lib/stores/hunts';
 	import { goto } from '$app/navigation';
+	import { theme } from '$lib/stores/theme';
 	import type { Pokemon, PokemonType } from '$lib/types';
 
 	let searchQuery = '';
@@ -40,40 +41,53 @@
 	<title>Pokédex – Shiny Hunter Z-A</title>
 </svelte:head>
 
-<!-- Page header -->
+!-- Page header -->
 <div class="mb-6">
 	<h1 class="page-header">📖 Z-A Pokédex</h1>
 	<p class="page-subheader">{POKEMON.length} Pokémon • Click a card to start a hunt</p>
 </div>
 
-<!-- Filters -->
+!-- Filters -->
 <div class="flex flex-wrap gap-3 mb-6">
-	<!-- Search -->
+	!-- Search -->
 	<div class="flex-1 min-w-48">
 		<input
 			type="search"
 			bind:value={searchQuery}
 			placeholder="Search by name or #..."
-			class="input input-bordered w-full"
+			class="input input-bordered w-full transition-colors duration-300"
+			class:bg-umbreon-dark={$theme === 'umbreon'}
+			class:border-umbreon-purple={$theme === 'umbreon'}
+			class:text-umbreon-moon={$theme === 'umbreon'}
 		/>
 	</div>
 
-	<!-- Type filter -->
-	<select bind:value={selectedType} class="select select-bordered w-40">
+	!-- Type filter -->
+	<select bind:value={selectedType} 
+		class="select select-bordered w-40 transition-colors duration-300"
+		class:bg-umbreon-dark={$theme === 'umbreon'}
+		class:border-umbreon-purple={$theme === 'umbreon'}
+		class:text-umbreon-moon={$theme === 'umbreon'}>
 		<option value="">All Types</option>
 		{#each ALL_TYPES as type}
 			<option value={type}>{type}</option>
 		{/each}
 	</select>
 
-	<!-- Shiny toggle -->
-	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 bg-base-100 border border-base-300 rounded-lg hover:border-primary transition-colors">
+	!-- Shiny toggle -->
+	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 border rounded-lg transition-all duration-300"
+		class:bg-base-100={$theme === 'sylveon'}
+		class:border-base-300={$theme === 'sylveon'}
+		class:hover:border-primary={$theme === 'sylveon'}
+		class:bg-umbreon-dark={$theme === 'umbreon'}
+		class:ring-border={$theme === 'umbreon'}
+		class:hover:border-umbreon-yellow={$theme === 'umbreon'}>
 		<input type="checkbox" bind:checked={showShiny} class="checkbox checkbox-warning checkbox-sm" />
 		<span class="text-sm font-semibold">✨ Shiny View</span>
 	</label>
 </div>
 
-<!-- Results count -->
+!-- Results count -->
 <p class="text-sm opacity-50 mb-4">
 	Showing {filtered.length} of {POKEMON.length} Pokémon
 	{#if selectedType || searchQuery}
@@ -83,7 +97,7 @@
 	{/if}
 </p>
 
-<!-- Grid -->
+!-- Grid -->
 {#if filtered.length === 0}
 	<div class="flex flex-col items-center py-12">
 		<EmptySearch animate={true} />
@@ -103,7 +117,7 @@
 	</div>
 {/if}
 
-<!-- Start Hunt Modal -->
+!-- Start Hunt Modal -->
 {#if huntTarget}
 	<StartHuntModal
 		pokemon={huntTarget}
