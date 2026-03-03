@@ -87,8 +87,8 @@
 
 <!-- Overlay -->
 <div class="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true"
-	class:bg-black/50={$theme === 'sylveon'}
-	class:bg-black/70={$theme === 'umbreon'}>
+	class:bg-black0={$theme === 'sylveon'}
+	class:bg-black={$theme === 'umbreon'}>
 	<!-- Backdrop -->
 	<button
 		class="absolute inset-0 backdrop-blur-sm"
@@ -158,8 +158,8 @@
 			<!-- Hunt stats -->
 			<div class="grid grid-cols-2 gap-3 mb-5">
 				<div class="rounded-xl p-3 transition-colors duration-300"
-					class:bg-white/70={$theme === 'sylveon'}
-					class:bg-umbreon-purple/30={$theme === 'umbreon'}>
+					class:bg-white={$theme === 'sylveon'}
+					class:bg-umbreon-purple={$theme === 'umbreon'}>
 					<p class="text-xs opacity-50 font-medium">Encounters</p>
 					<p class="text-2xl font-black tabular-nums transition-colors duration-300"
 						class:text-dark-text={$theme === 'sylveon'}
@@ -168,8 +168,8 @@
 					</p>
 				</div>
 				<div class="rounded-xl p-3 transition-colors duration-300"
-					class:bg-white/70={$theme === 'sylveon'}
-					class:bg-umbreon-purple/30={$theme === 'umbreon'}>
+					class:bg-white={$theme === 'sylveon'}
+					class:bg-umbreon-purple={$theme === 'umbreon'}>
 					<p class="text-xs opacity-50 font-medium">Duration</p>
 					<p class="text-2xl font-black transition-colors duration-300"
 						class:text-dark-text={$theme === 'sylveon'}

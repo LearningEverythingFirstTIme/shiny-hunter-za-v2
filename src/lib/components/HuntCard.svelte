@@ -184,8 +184,8 @@
 
 	<!-- Progress bar background -->
 	<div class="absolute bottom-0 left-0 right-0 h-1 progress-bar-bg"
-		class:bg-black/5={$theme === 'sylveon'}
-		class:bg-umbreon-purple/30={$theme === 'umbreon'}>
+		class:bg-black={$theme === 'sylveon'}
+		class:bg-umbreon-purple={$theme === 'umbreon'}>
 		<div class="h-full progress-bar-fill transition-all duration-500"
 			style="width: {progressToOdds}%; background-color: {progressColor};"
 			class:shadow-glow={$theme === 'umbreon' && progressToOdds >= 50}></div>
@@ -211,8 +211,8 @@
 				{hunt.pokemonName}
 				{#if pokemon?.evs}
 					<span class="text-xs ml-1 font-mono block transition-colors duration-300"
-						class:text-pink-400/80={$theme === 'sylveon'}
-						class:text-umbreon-silver/60={$theme === 'umbreon'}>
+						class:text-pink-400={$theme === 'sylveon'}
+						class:text-umbreon-silver={$theme === 'umbreon'}>
 						{formatEVs(pokemon.evs)}
 					</span>
 				{/if}

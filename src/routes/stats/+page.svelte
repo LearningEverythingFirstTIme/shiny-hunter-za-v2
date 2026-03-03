@@ -203,10 +203,10 @@
 			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
 				class:bg-base-100={$theme === 'sylveon'}
 				class:border-base-300={$theme === 'sylveon'}
-				class:hover:border-primary/30={$theme === 'sylveon'}
+				class:hover:border-primary={$theme === 'sylveon'}
 				class:bg-umbreon-dark={$theme === 'umbreon'}
 				class:ring-border={$theme === 'umbreon'}
-				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
+				class:hover:border-umbreon-yellow={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">AVG. ENCOUNTERS</p>
 				<p class="text-2xl font-black transition-colors duration-300"
 					class:text-dark-text={$theme === 'sylveon'}
@@ -218,10 +218,10 @@
 			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
 				class:bg-base-100={$theme === 'sylveon'}
 				class:border-base-300={$theme === 'sylveon'}
-				class:hover:border-warning/30={$theme === 'sylveon'}
+				class:hover:border-warning={$theme === 'sylveon'}
 				class:bg-umbreon-dark={$theme === 'umbreon'}
 				class:ring-border={$theme === 'umbreon'}
-				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
+				class:hover:border-umbreon-yellow={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">ALPHA SHINIES</p>
 				<p class="text-2xl font-black transition-colors duration-300"
 					class:text-dark-text={$theme === 'sylveon'}
@@ -235,10 +235,10 @@
 			<div class="card border p-4 secondary-stat transition-all duration-300 hover:shadow-md"
 				class:bg-base-100={$theme === 'sylveon'}
 				class:border-base-300={$theme === 'sylveon'}
-				class:hover:border-secondary/30={$theme === 'sylveon'}
+				class:hover:border-secondary={$theme === 'sylveon'}
 				class:bg-umbreon-dark={$theme === 'umbreon'}
 				class:ring-border={$theme === 'umbreon'}
-				class:hover:border-umbreon-yellow/30={$theme === 'umbreon'}>
+				class:hover:border-umbreon-yellow={$theme === 'umbreon'}>
 				<p class="text-xs opacity-50 font-semibold mb-1">FAVORITE METHOD</p>
 				<p class="text-lg font-black leading-tight transition-colors duration-300"
 					class:text-dark-text={$theme === 'sylveon'}

@@ -132,8 +132,8 @@
 		<!-- Stats grid -->
 		<div class="grid grid-cols-2 gap-2 text-xs">
 			<div class="rounded-lg p-2 text-center stat-box transition-all duration-300"
-				class:bg-white/60={$theme === 'sylveon'}
-				class:bg-umbreon-purple/30={$theme === 'umbreon'}
+				class:bg-white={$theme === 'sylveon'}
+				class:bg-umbreon-purple={$theme === 'umbreon'}
 				class:glow={isHovered}>
 				<p class="opacity-50 font-medium">Encounters</p>
 				<p class="font-bold text-base tabular-nums encounter-count transition-colors duration-300"
@@ -144,8 +144,8 @@
 				</p>
 			</div>
 			<div class="rounded-lg p-2 text-center stat-box transition-all duration-300"
-				class:bg-white/60={$theme === 'sylveon'}
-				class:bg-umbreon-purple/30={$theme === 'umbreon'}
+				class:bg-white={$theme === 'sylveon'}
+				class:bg-umbreon-purple={$theme === 'umbreon'}
 				class:glow={isHovered}>
 				<p class="opacity-50 font-medium">Duration</p>
 				<p class="font-bold text-base transition-colors duration-300"
