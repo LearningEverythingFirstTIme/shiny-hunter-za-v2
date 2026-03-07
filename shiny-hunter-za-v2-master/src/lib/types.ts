@@ -42,14 +42,6 @@ export type HuntMethod =
 
 export type HuntStatus = 'active' | 'completed' | 'abandoned';
 
-export interface Folder {
-	id?: string;
-	userId: string;
-	name: string;
-	createdAt: Date;
-	updatedAt: Date;
-}
-
 export interface Hunt {
 	id?: string;
 	userId: string;
@@ -68,7 +60,6 @@ export interface Hunt {
 	pausedAt?: Date;
 	totalPausedMinutes?: number;
 	notes?: string;
-	folderId?: string | null;
 }
 
 export interface Shiny {

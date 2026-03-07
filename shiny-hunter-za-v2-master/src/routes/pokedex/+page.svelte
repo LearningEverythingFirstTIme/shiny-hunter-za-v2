@@ -6,7 +6,6 @@
 	import { user } from '$lib/stores/auth';
 	import { startHunt } from '$lib/stores/hunts';
 	import { goto } from '$app/navigation';
-	import { theme } from '$lib/stores/theme';
 	import type { Pokemon, PokemonType } from '$lib/types';
 
 	let searchQuery = '';
@@ -24,20 +23,11 @@
 		return matchesSearch && matchesType;
 	});
 
-	async function handleStartHunt(
-		e: CustomEvent<{ method: import('$lib/types').HuntMethod; folderId: string | null }>
-	) {
+	async function handleStartHunt(e: CustomEvent<{ method: import('$lib/types').HuntMethod }>) {
 		if (!huntTarget || !$user || starting) return;
 		starting = true;
 		try {
-			await startHunt(
-				$user.uid,
-				huntTarget.id,
-				huntTarget.name,
-				huntTarget.nationalId,
-				e.detail.method,
-				e.detail.folderId
-			);
+			await startHunt($user.uid, huntTarget.id, huntTarget.name, huntTarget.nationalId, e.detail.method);
 			huntTarget = null;
 			goto('/hunts');
 		} finally {
@@ -64,19 +54,12 @@
 			type="search"
 			bind:value={searchQuery}
 			placeholder="Search by name or #..."
-			class="input input-bordered w-full transition-colors duration-300"
-			class:bg-umbreon-dark={$theme === 'umbreon'}
-			class:border-umbreon-purple={$theme === 'umbreon'}
-			class:text-umbreon-moon={$theme === 'umbreon'}
+			class="input input-bordered w-full"
 		/>
 	</div>
 
 	<!-- Type filter -->
-	<select bind:value={selectedType}
-		class="select select-bordered w-40 transition-colors duration-300"
-		class:bg-umbreon-dark={$theme === 'umbreon'}
-		class:border-umbreon-purple={$theme === 'umbreon'}
-		class:text-umbreon-moon={$theme === 'umbreon'}>
+	<select bind:value={selectedType} class="select select-bordered w-40">
 		<option value="">All Types</option>
 		{#each ALL_TYPES as type}
 			<option value={type}>{type}</option>
@@ -84,13 +67,7 @@
 	</select>
 
 	<!-- Shiny toggle -->
-	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 border rounded-lg transition-all duration-300"
-		class:bg-base-100={$theme === 'sylveon'}
-		class:border-base-300={$theme === 'sylveon'}
-		class:hover:border-primary={$theme === 'sylveon'}
-		class:bg-umbreon-dark={$theme === 'umbreon'}
-		class:ring-border={$theme === 'umbreon'}
-		class:hover:border-umbreon-yellow={$theme === 'umbreon'}>
+	<label class="flex items-center gap-2 cursor-pointer select-none px-3 py-2 bg-base-100 border border-base-300 rounded-lg hover:border-primary transition-colors">
 		<input type="checkbox" bind:checked={showShiny} class="checkbox checkbox-warning checkbox-sm" />
 		<span class="text-sm font-semibold">✨ Shiny View</span>
 	</label>

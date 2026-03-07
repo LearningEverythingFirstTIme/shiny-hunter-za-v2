@@ -2,10 +2,7 @@
 	import type { Hunt } from '$lib/types';
 	import { createEventDispatcher } from 'svelte';
 	import { updateEncounters, completeHunt, abandonHunt, resumeHunt, pauseHunt, updateHuntNotes, updateHuntMethod } from '$lib/stores/hunts';
-	import { assignHuntToFolder, folders } from '$lib/stores/folders';
 	import { HUNT_METHODS, POKEMON, formatEVs } from '$lib/data/pokemon';
-	import { theme } from '$lib/stores/theme';
-	import { onDestroy } from 'svelte';
 
 	export let hunt: Hunt;
 
@@ -17,23 +14,21 @@
 	let abandoning = false;
 	let pausing = false;
 	let isAlpha = false;
-
+	
 	let showNotes = false;
 	let notes = hunt.notes || '';
 	let savingNotes = false;
-
+	
 	let showMethodEdit = false;
 	let selectedMethod = hunt.method;
 	let savingMethod = false;
-	let selectedFolderId = hunt.folderId ?? '';
-	let savingFolder = false;
-
+	
 	let showBulkAdd = false;
 
 	// Tick every minute so elapsed time + enc/hr stay fresh
 	let now = Date.now();
 	const ticker = setInterval(() => { now = Date.now(); }, 60_000);
-
+	import { onDestroy } from 'svelte';
 	onDestroy(() => clearInterval(ticker));
 
 	$: elapsedMs = hunt.isPaused && hunt.pausedAt
@@ -55,15 +50,10 @@
 
 	// Progress towards odds (1/4096)
 	$: progressToOdds = Math.min(100, (hunt.encounters / 4096) * 100);
-
-	// Theme-aware progress colors
-	$: progressColor = $theme === 'umbreon'
-		? (progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#00BFFF' : '#111120')
-		: (progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#87CEEB' : '#FFB7C5');
+	$: progressColor = progressToOdds >= 100 ? '#FFD700' : progressToOdds >= 50 ? '#87CEEB' : '#FFB7C5';
 
 	// Find Pokemon to get EVs
 	$: pokemon = POKEMON.find(p => p.name === hunt.pokemonName);
-	$: selectedFolderId = hunt.folderId ?? '';
 
 	async function onIncrement(delta: number) {
 		if (!hunt.id) return;
@@ -135,35 +125,21 @@
 		}
 	}
 
-	async function onChangeFolder(event: Event) {
-		if (!hunt.id || savingFolder) return;
-		const target = event.currentTarget as HTMLSelectElement;
-		const nextFolderId = target.value || null;
-		if (nextFolderId === (hunt.folderId ?? null)) return;
-
-		savingFolder = true;
-		try {
-			await assignHuntToFolder(hunt.id, nextFolderId);
-		} finally {
-			savingFolder = false;
-		}
-	}
-
 	function handleMouseMove(e: MouseEvent) {
 		// Skip tilt effect on touch devices to prevent panel movement when clicking buttons
 		if (window.matchMedia('(pointer: coarse)').matches) return;
 		if (!cardElement) return;
-
+		
 		const rect = cardElement.getBoundingClientRect();
 		const x = e.clientX - rect.left;
 		const y = e.clientY - rect.top;
-
+		
 		const centerX = rect.width / 2;
 		const centerY = rect.height / 2;
-
+		
 		const rotateX = (y - centerY) / 15;
 		const rotateY = (centerX - x) / 15;
-
+		
 		cardElement.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.01)`;
 	}
 
@@ -183,11 +159,7 @@
 
 <div
 	bind:this={cardElement}
-	class="card border p-4 animate-fade-in hunt-card relative overflow-hidden transition-all duration-300"
-	class:bg-base-100={$theme === 'sylveon'}
-	class:border-base-300={$theme === 'sylveon'}
-	class:bg-umbreon-dark={$theme === 'umbreon'}
-	class:ring-border={$theme === 'umbreon'}
+	class="card bg-base-100 border border-base-300 p-4 animate-fade-in hunt-card relative overflow-hidden"
 	class:hovered={isHovered}
 	role="article"
 	on:mousemove={handleMouseMove}
@@ -201,12 +173,10 @@
 	{/if}
 
 	<!-- Progress bar background -->
-	<div class="absolute bottom-0 left-0 right-0 h-1 progress-bar-bg"
-		class:bg-black={$theme === 'sylveon'}
-		class:bg-umbreon-purple={$theme === 'umbreon'}>
+	<div class="absolute bottom-0 left-0 right-0 h-1 progress-bar-bg">
 		<div class="h-full progress-bar-fill transition-all duration-500"
-			style="width: {progressToOdds}%; background-color: {progressColor};"
-			class:shadow-glow={$theme === 'umbreon' && progressToOdds >= 50}></div>
+			style="width: {progressToOdds}%; background-color: {progressColor};">
+		</div>
 	</div>
 
 	<!-- Header row -->
@@ -221,20 +191,17 @@
 			/>
 		</div>
 		<div class="flex-1 min-w-0">
-			<p class="font-bold text-base leading-tight truncate pokemon-name transition-all duration-300"
-				class:highlight={isHovered}>
+			<p class="font-bold text-base leading-tight pokemon-name transition-all duration-300"
+				class:highlight={isHovered}
+				style="color: #2D1B2E;">
 				{hunt.pokemonName}
 				{#if pokemon?.evs}
-					<span class="text-xs ml-1 font-mono block transition-colors duration-300"
-						class:text-pink-400={$theme === 'sylveon'}
-						class:text-umbreon-silver={$theme === 'umbreon'}>
-						{formatEVs(pokemon.evs)}
-					</span>
+					<span class="text-xs text-pink-400/80 ml-1 font-mono block">{formatEVs(pokemon.evs)}</span>
 				{/if}
 			</p>
 			{#if showMethodEdit}
-				<select
-					bind:value={selectedMethod}
+				<select 
+					bind:value={selectedMethod} 
 					class="select select-bordered select-xs w-full mt-1"
 				>
 					{#each HUNT_METHODS as method}
@@ -242,14 +209,14 @@
 					{/each}
 				</select>
 				<div class="flex gap-1 mt-1">
-					<button
+					<button 
 						class="btn btn-xs btn-primary"
 						on:click={onSaveMethod}
 						disabled={savingMethod || selectedMethod === hunt.method}
 					>
 						{savingMethod ? '...' : 'Save'}
 					</button>
-					<button
+					<button 
 						class="btn btn-xs btn-ghost"
 						on:click={() => { showMethodEdit = false; selectedMethod = hunt.method; }}
 					>
@@ -257,7 +224,7 @@
 					</button>
 				</div>
 			{:else}
-				<button
+				<button 
 					class="text-xs opacity-60 hover:text-primary transition-colors text-left"
 					on:click={() => { showMethodEdit = true; selectedMethod = hunt.method; }}
 				>
@@ -278,17 +245,11 @@
 	<div class="mb-3 relative z-10">
 		<div class="flex justify-between text-xs mb-1">
 			<span class="opacity-50">Progress to odds</span>
-			<span class="font-medium transition-colors duration-300"
-				style="color: {progressColor};">
-				{progressToOdds.toFixed(1)}%
-			</span>
+			<span class="font-medium" style="color: {progressColor};">{progressToOdds.toFixed(1)}%</span>
 		</div>
-		<div class="h-2 rounded-full overflow-hidden transition-colors duration-300"
-			class:bg-base-200={$theme === 'sylveon'}
-			class:bg-umbreon-purple={$theme === 'umbreon'}>
+		<div class="h-2 bg-base-200 rounded-full overflow-hidden">
 			<div class="h-full rounded-full transition-all duration-500 relative"
-				style="width: {progressToOdds}%; background: linear-gradient(90deg, {progressColor}88, {progressColor});"
-				class:shadow-glow={$theme === 'umbreon' && progressToOdds >= 50}>
+				style="width: {progressToOdds}%; background: linear-gradient(90deg, {progressColor}88, {progressColor});">
 				{#if progressToOdds > 5}
 					<div class="absolute inset-0 shimmer-overlay"></div>
 				{/if}
@@ -296,44 +257,25 @@
 		</div>
 	</div>
 
-	<div class="mb-3 relative z-10">
-		<label class="text-xs font-medium opacity-60 mb-1 block" for={`folder-${hunt.id}`}>FOLDER</label>
-		<select
-			id={`folder-${hunt.id}`}
-			class="select select-bordered select-sm w-full"
-			class:bg-umbreon-dark={$theme === 'umbreon'}
-			class:border-umbreon-purple={$theme === 'umbreon'}
-			bind:value={selectedFolderId}
-			on:change={onChangeFolder}
-			disabled={savingFolder}
-		>
-			<option value="">Ungrouped</option>
-			{#each $folders as folder (folder.id)}
-				<option value={folder.id}>{folder.name}</option>
-			{/each}
-		</select>
-	</div>
-
 	<!-- Encounters display + adjustment -->
-	<div class="rounded-xl p-3 mb-3 encounter-box relative z-10 transition-all duration-300"
-		class:bg-base-200={$theme === 'sylveon'}
-		class:bg-umbreon-purple={$theme === 'umbreon'}
+	<div class="bg-base-200 rounded-xl p-3 mb-3 encounter-box relative z-10 transition-all duration-300"
 		class:glow={isHovered}>
 		<div class="flex items-center justify-between">
 			<!-- Left side: Encounters count -->
 			<div>
 				<p class="text-xs font-medium opacity-60 mb-0.5">ENCOUNTERS</p>
 				<p class="text-3xl font-bold tabular-nums leading-none encounter-count transition-all duration-300"
-					class:scale={isHovered}>
+					class:scale={isHovered}
+					style="color: #2D1B2E;">
 					{hunt.encounters.toLocaleString()}
 				</p>
 			</div>
-			<!-- Right side: rate + -1 button -->
+			<!-- Right side: -1 button (away from main + buttons) -->
 			<div class="flex items-center gap-3">
 				{#if hunt.encounters > 0}
 					<div class="text-right mr-2">
 						<p class="text-xs font-medium opacity-60 mb-0.5">RATE</p>
-						<p class="text-lg font-bold tabular-nums leading-none transition-colors duration-300">
+						<p class="text-lg font-bold tabular-nums leading-none" style="color: #2D1B2E;">
 							{encPerHourDisplay}
 						</p>
 					</div>
@@ -416,20 +358,18 @@
 			<textarea
 				bind:value={notes}
 				placeholder="Add notes about this hunt..."
-				class="textarea textarea-bordered w-full text-sm transition-colors duration-300"
-				class:bg-umbreon-dark={$theme === 'umbreon'}
-				class:border-umbreon-purple={$theme === 'umbreon'}
+				class="textarea textarea-bordered w-full text-sm"
 				rows="2"
 			></textarea>
 			<div class="flex justify-end gap-1 mt-1">
-				<button
+				<button 
 					class="btn btn-xs btn-primary"
 					on:click={onSaveNotes}
 					disabled={savingNotes}
 				>
 					{savingNotes ? '...' : 'Save Notes'}
 				</button>
-				<button
+				<button 
 					class="btn btn-xs btn-ghost"
 					on:click={() => { showNotes = false; notes = hunt.notes || ''; }}
 				>
@@ -438,7 +378,7 @@
 			</div>
 		</div>
 	{:else}
-		<button
+		<button 
 			class="btn btn-ghost btn-xs w-full mb-3 relative z-10 opacity-50 hover:opacity-100 transition-all"
 			on:click={() => { showNotes = true; notes = hunt.notes || ''; }}
 		>
@@ -494,7 +434,7 @@
 		}
 	}
 
-	:root[data-theme="sylveon"] .hunt-card:hover {
+	.hunt-card:hover {
 		box-shadow: 0 12px 32px rgba(255, 183, 197, 0.3), 0 4px 16px rgba(45, 27, 46, 0.1);
 		border-color: #FFB7C5;
 	}
@@ -513,23 +453,6 @@
 		animation: glowPulse 2s ease infinite;
 	}
 
-	:root[data-theme="sylveon"] .pokemon-name.highlight {
-		color: #FFB7C5;
-	}
-
-	:root[data-theme="sylveon"] .encounter-box.glow {
-		background: linear-gradient(135deg, rgba(255, 183, 197, 0.15) 0%, rgba(255, 236, 242, 0.5) 100%);
-		box-shadow: 0 2px 12px rgba(255, 183, 197, 0.2);
-	}
-
-	.encounter-count.scale {
-		transform: scale(1.05);
-	}
-
-	:root[data-theme="sylveon"] .encounter-count.scale {
-		color: #FFB7C5;
-	}
-
 	@keyframes glowPulse {
 		0%, 100% { opacity: 0.5; }
 		50% { opacity: 1; }
@@ -546,6 +469,20 @@
 	@keyframes gentleBounce {
 		0%, 100% { transform: translateY(0); }
 		50% { transform: translateY(-3px); }
+	}
+
+	.pokemon-name.highlight {
+		color: #FFB7C5;
+	}
+
+	.encounter-box.glow {
+		background: linear-gradient(135deg, rgba(255, 183, 197, 0.15) 0%, rgba(255, 236, 242, 0.5) 100%);
+		box-shadow: 0 2px 12px rgba(255, 183, 197, 0.2);
+	}
+
+	.encounter-count.scale {
+		transform: scale(1.05);
+		color: #FFB7C5;
 	}
 
 	.increment-btn {
@@ -596,6 +533,10 @@
 		left: 100%;
 	}
 
+	.progress-bar-bg {
+		background: rgba(0, 0, 0, 0.05);
+	}
+
 	.shimmer-overlay {
 		background: linear-gradient(
 			90deg,
@@ -616,14 +557,11 @@
 	}
 
 	.alpha-toggle.hovered {
+		background: rgba(255, 183, 197, 0.1);
 		border-radius: 8px;
 		padding: 4px 8px;
 		margin-left: -8px;
 		margin-right: -8px;
-	}
-
-	:root[data-theme="sylveon"] .alpha-toggle.hovered {
-		background: rgba(255, 183, 197, 0.1);
 	}
 
 	.alpha-badge {
@@ -633,53 +571,5 @@
 	@keyframes pulse {
 		0%, 100% { opacity: 1; }
 		50% { opacity: 0.7; }
-	}
-
-	/* ── Umbreon Dark Mode Overrides ── */
-	:global([data-theme='umbreon']) .hunt-card {
-		box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
-	}
-
-	:global([data-theme='umbreon']) .hunt-card:hover {
-		box-shadow: 0 12px 32px rgba(0, 191, 255, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
-		border-color: rgba(0, 191, 255, 0.5);
-	}
-
-	:global([data-theme='umbreon']) .hunt-glow {
-		background: radial-gradient(circle at 50% 0%, rgba(0, 191, 255, 0.12) 0%, transparent 60%);
-	}
-
-	:global([data-theme='umbreon']) .pokemon-name.highlight {
-		color: #00bfff;
-	}
-
-	:global([data-theme='umbreon']) .encounter-box.glow {
-		background: linear-gradient(135deg, rgba(0, 191, 255, 0.1) 0%, rgba(17, 17, 32, 0.8) 100%);
-		box-shadow: 0 2px 12px rgba(0, 191, 255, 0.15);
-	}
-
-	:global([data-theme='umbreon']) .encounter-count.scale {
-		color: #00bfff;
-	}
-
-	:global([data-theme='umbreon']) .alpha-toggle.hovered {
-		background: rgba(0, 191, 255, 0.08);
-	}
-
-	:global([data-theme='umbreon']) .progress-bar-bg {
-		background: rgba(255, 255, 255, 0.04);
-	}
-
-	:global([data-theme='umbreon']) .shadow-glow {
-		box-shadow: 0 0 10px rgba(0, 191, 255, 0.5);
-	}
-
-	:global([data-theme='umbreon']) .shimmer-overlay {
-		background: linear-gradient(
-			90deg,
-			transparent,
-			rgba(0, 191, 255, 0.25),
-			transparent
-		);
 	}
 </style>

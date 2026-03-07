@@ -33,8 +33,7 @@ export function subscribeHunts(userId: string) {
 							startedAt: d.startedAt?.toDate() ?? new Date(),
 							completedAt: d.completedAt?.toDate(),
 							pausedAt: d.pausedAt?.toDate() ?? undefined,
-							notes: d.notes ?? '',
-							folderId: d.folderId ?? null
+							notes: d.notes ?? ''
 						} as Hunt;
 					});
 					hunts.set(data);
@@ -63,8 +62,7 @@ export async function startHunt(
 	pokemonId: number,
 	pokemonName: string,
 	nationalId: number,
-	method: HuntMethod,
-	folderId: string | null = null
+	method: HuntMethod
 ): Promise<string> {
 	try {
 		const { db } = await import('$lib/firebase');
@@ -82,8 +80,7 @@ export async function startHunt(
 			startedAt: Timestamp.now(),
 			isPaused: false,
 			totalPausedMinutes: 0,
-			notes: '',
-			folderId
+			notes: ''
 		});
 
 		toast.success(`Started hunt for ${pokemonName}! Good luck! 🎯`);
