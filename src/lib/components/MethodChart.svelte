@@ -15,7 +15,8 @@
 		'Mass Outbreak': '#6890F0',
 		'Alpha Hunt': '#F85888',
 		'Dex Research': '#A890F0',
-		'Roaming': '#F08030'
+		'Roaming': '#F08030',
+		'Hyperspace Lumiose': '#00A7E1'
 	};
 
 	function getThemeColors(isDark: boolean) {

@@ -469,5 +469,6 @@ export const ALL_TYPES = [
 export const HUNT_METHODS = [
 	'Random Encounter',
 	'Fast Travel',
-	'Bench Reset'
+	'Bench Reset',
+	'Hyperspace Lumiose'
 ] as const;

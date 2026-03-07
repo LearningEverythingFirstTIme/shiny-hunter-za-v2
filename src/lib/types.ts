@@ -38,7 +38,8 @@ export type HuntMethod =
 	| 'Mass Outbreak'
 	| 'Alpha Hunt'
 	| 'Dex Research'
-	| 'Roaming';
+	| 'Roaming'
+	| 'Hyperspace Lumiose';
 
 export type HuntStatus = 'active' | 'completed' | 'abandoned';
 
