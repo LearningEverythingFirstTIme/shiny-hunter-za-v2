@@ -2,8 +2,17 @@
 	import { onMount, createEventDispatcher } from 'svelte';
 	import type { Hunt } from '$lib/types';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 
 	export let hunt: Hunt;
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'success' | 'light' = 'success') {
+		if (hapticsReady) trigger(type);
+	}
 
 	const dispatch = createEventDispatcher<{ close: void }>();
 
@@ -94,7 +103,7 @@
 	<!-- Backdrop -->
 	<button
 		class="absolute inset-0 backdrop-blur-sm"
-		on:click={() => dispatch('close')}
+		on:click={() => { dispatch('close'); haptic('light'); }}
 		aria-label="Close celebration"
 	></button>
 
@@ -166,7 +175,7 @@
 
 			<button
 				class="btn btn-primary w-full font-bold"
-				on:click={() => dispatch('close')}
+				on:click={() => { dispatch('close'); haptic(); }}
 			>
 				🎉 Amazing! Continue
 			</button>

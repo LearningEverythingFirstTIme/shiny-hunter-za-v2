@@ -5,9 +5,18 @@
 	import { assignHuntToFolder, folders } from '$lib/stores/folders';
 	import { HUNT_METHODS, POKEMON, formatEVs } from '$lib/data/pokemon';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 	import { onDestroy } from 'svelte';
 
 	export let hunt: Hunt;
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' | 'medium' | 'success' | 'error' | 'warning' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	const dispatch = createEventDispatcher<{ complete: Hunt }>();
 
@@ -68,6 +77,7 @@
 	async function onIncrement(delta: number) {
 		if (!hunt.id) return;
 		await updateEncounters(hunt.id, delta, hunt.encounters);
+		haptic('light');
 	}
 
 	async function onComplete() {
@@ -76,8 +86,10 @@
 		try {
 			await completeHunt(hunt, isAlpha);
 			dispatch('complete', hunt);
+			haptic('success');
 		} catch {
 			// error toast already shown by store
+			haptic('error');
 		} finally {
 			completing = false;
 		}
@@ -89,6 +101,7 @@
 		abandoning = true;
 		try {
 			await abandonHunt(hunt.id);
+			haptic('warning');
 		} catch {
 			// error toast already shown by store
 		} finally {
@@ -108,6 +121,7 @@
 			} else {
 				await pauseHunt(hunt.id);
 			}
+			haptic('light');
 		} finally {
 			pausing = false;
 		}
@@ -119,6 +133,7 @@
 		try {
 			await updateHuntNotes(hunt.id, notes);
 			showNotes = false;
+			haptic('success');
 		} finally {
 			savingNotes = false;
 		}
@@ -130,6 +145,7 @@
 		try {
 			await updateHuntMethod(hunt.id, selectedMethod);
 			showMethodEdit = false;
+			haptic('success');
 		} finally {
 			savingMethod = false;
 		}

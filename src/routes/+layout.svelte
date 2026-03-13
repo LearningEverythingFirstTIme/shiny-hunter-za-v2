@@ -7,9 +7,23 @@
 	import { subscribeFolders, unsubscribeFolders } from '$lib/stores/folders';
 	import { subscribeShinies, unsubscribeShinies } from '$lib/stores/shinies';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 	import { onMount, onDestroy } from 'svelte';
 
 	let prevUserId: string | null = null;
+	let hapticsReady = false;
+
+	onMount(() => {
+		theme.init();
+		if (browser) {
+			hapticsReady = hapticsSupported();
+		}
+	});
+
+	function haptic(type: 'light' | 'medium' | 'success' | 'error' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	$: {
 		const uid = $user?.uid ?? null;
@@ -94,7 +108,7 @@
 
 				<button
 					class="btn btn-primary w-full font-bold text-base gap-2"
-					on:click={signInWithGoogle}
+					on:click={() => { signInWithGoogle(); haptic('light'); }}
 				>
 					<svg class="w-5 h-5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 						<path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>

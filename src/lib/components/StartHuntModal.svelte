@@ -4,8 +4,17 @@
 	import { HUNT_METHODS, getShinySpriteUrl } from '$lib/data/pokemon';
 	import { folders } from '$lib/stores/folders';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 
 	export let pokemon: Pokemon;
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' | 'success' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	const dispatch = createEventDispatcher<{
 		start: { method: HuntMethod; folderId: string | null };
@@ -87,13 +96,10 @@
 
 		<!-- Actions -->
 		<div class="flex gap-3">
-			<button class="btn btn-ghost flex-1" on:click={() => dispatch('close')}>Cancel</button>
+			<button class="btn btn-ghost flex-1" on:click={() => { dispatch('close'); haptic('light'); }}>Cancel</button>
 			<button
 				class="btn btn-primary flex-[2] font-bold"
-				on:click={() => dispatch('start', {
-					method: selectedMethod,
-					folderId: selectedFolderId || null
-				})}
+				on:click={() => { dispatch('start', { method: selectedMethod, folderId: selectedFolderId || null }); haptic('success'); }}
 			>
 				🎯 Start Hunt
 			</button>

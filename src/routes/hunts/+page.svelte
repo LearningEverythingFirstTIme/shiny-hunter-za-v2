@@ -7,6 +7,15 @@
 	import { EmptyHunts } from '$lib/components/illustrations';
 	import type { Hunt } from '$lib/types';
 	import { toast } from '$lib/stores/toasts';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' | 'success' | 'warning' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	type HuntGroup = {
 		id: string;
@@ -56,6 +65,7 @@
 		try {
 			await createFolder($user.uid, trimmedName);
 			newFolderName = '';
+			haptic('success');
 		} finally {
 			creatingFolder = false;
 		}

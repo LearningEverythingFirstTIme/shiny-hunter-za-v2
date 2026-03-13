@@ -7,7 +7,16 @@
 	import { startHunt } from '$lib/stores/hunts';
 	import { goto } from '$app/navigation';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 	import type { Pokemon, PokemonType } from '$lib/types';
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' | 'success' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	let searchQuery = '';
 	let selectedType: PokemonType | '' = '';
@@ -40,6 +49,7 @@
 			);
 			huntTarget = null;
 			goto('/hunts');
+			haptic('success');
 		} finally {
 			starting = false;
 		}

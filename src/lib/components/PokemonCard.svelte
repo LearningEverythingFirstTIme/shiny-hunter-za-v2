@@ -3,10 +3,19 @@
 	import { getSpriteUrl, getShinySpriteUrl, formatEVs } from '$lib/data/pokemon';
 	import { createEventDispatcher } from 'svelte';
 	import { theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
 
 	export let pokemon: Pokemon;
 	export let showShiny = false;
 	export let compact = false;
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	const dispatch = createEventDispatcher<{ hunt: Pokemon }>();
 
@@ -130,7 +139,7 @@
 		<button
 			class="btn btn-primary btn-sm w-full font-bold relative z-10 hunt-btn transition-all duration-300"
 			class:btn-lg={isHovered}
-			on:click={() => dispatch('hunt', pokemon)}
+			on:click={() => { dispatch('hunt', pokemon); haptic(); }}
 		>
 			🎯 Start Hunt
 		</button>

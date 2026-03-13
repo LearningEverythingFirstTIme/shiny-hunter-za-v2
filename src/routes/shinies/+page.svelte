@@ -2,6 +2,15 @@
 	import { shinies, shiniesLoading } from '$lib/stores/shinies';
 	import ShinyCard from '$lib/components/ShinyCard.svelte';
 	import { EmptyShinies } from '$lib/components/illustrations';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
+
+	let hapticsReady = false;
+	if (browser) hapticsReady = hapticsSupported();
+
+	function haptic(type: 'light' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	let sortBy: 'date' | 'encounters' | 'name' = 'date';
 
@@ -33,7 +42,7 @@
 					class="btn btn-sm join-item"
 					class:btn-primary={sortBy === 'date'}
 					class:btn-ghost={sortBy !== 'date'}
-					on:click={() => { sortBy = 'date'; }}
+					on:click={() => { sortBy = 'date'; haptic(); }}
 				>
 					Recent
 				</button>
@@ -41,7 +50,7 @@
 					class="btn btn-sm join-item"
 					class:btn-primary={sortBy === 'encounters'}
 					class:btn-ghost={sortBy !== 'encounters'}
-					on:click={() => { sortBy = 'encounters'; }}
+					on:click={() => { sortBy = 'encounters'; haptic(); }}
 				>
 					Rarest
 				</button>
@@ -49,7 +58,7 @@
 					class="btn btn-sm join-item"
 					class:btn-primary={sortBy === 'name'}
 					class:btn-ghost={sortBy !== 'name'}
-					on:click={() => { sortBy = 'name'; }}
+					on:click={() => { sortBy = 'name'; haptic(); }}
 				>
 					Name
 				</button>

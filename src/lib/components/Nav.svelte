@@ -3,6 +3,18 @@
 	import { user, signOut } from '$lib/stores/auth';
 	import { activeHuntsCount } from '$lib/stores/hunts';
 	import { theme, type Theme } from '$lib/stores/theme';
+	import { trigger, hapticsSupported } from '$lib/haptics';
+	import { browser } from '$app/environment';
+
+	let hapticsReady = false;
+
+	if (browser) {
+		hapticsReady = hapticsSupported();
+	}
+
+	function haptic(type: 'light' | 'medium' | 'success' | 'error' = 'light') {
+		if (hapticsReady) trigger(type);
+	}
 
 	const links = [
 		{ href: '/pokedex', label: 'Pokédex', icon: '📖' },
@@ -86,7 +98,7 @@
 			class:umbreon-active={currentTheme === 'umbreon'}
 			class:aegislash-active={currentTheme === 'aegislash'}
 			class:emboar-active={currentTheme === 'emboar'}
-			on:click={theme.cycle}
+			on:click={() => { theme.cycle(); haptic('light'); }}
 			title={config.tooltip}
 			aria-label="Cycle theme: currently {config.label}, next {themeConfig[nextTheme].label}"
 		>
@@ -111,7 +123,7 @@
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 				<ul tabindex="0" class="menu menu-sm dropdown-content mt-2 z-[1] p-2 shadow-lg rounded-box w-44 bg-base-200 border border-base-300">
 					<li class="menu-title px-3 py-1 text-xs opacity-60">{$user.displayName ?? $user.email}</li>
-					<li><button on:click={signOut} class="text-error">Sign Out</button></li>
+					<li><button on:click={() => { signOut(); haptic('medium'); }} class="text-error">Sign Out</button></li>
 				</ul>
 			</div>
 		{/if}
