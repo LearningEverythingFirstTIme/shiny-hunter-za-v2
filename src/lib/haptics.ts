@@ -1,21 +1,21 @@
 import { browser } from '$app/environment';
-import { WebHaptics } from 'web-haptics';
+import { createWebHaptics } from 'web-haptics/svelte';
 
-let haptics: WebHaptics | null = null;
+let haptics: ReturnType<typeof createWebHaptics> | null = null;
 
 // Initialize haptics only on the client
 if (browser) {
-  haptics = new WebHaptics({ showSwitch: false });
+  haptics = createWebHaptics({ showSwitch: false });
 }
 
 export function trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' | 'selection' | 'nudge' = 'light') {
-  if (!browser || !haptics?.isSupported) return;
+  if (!browser || !haptics) return;
   
-  // Map to web-haptics pattern format
-  const patterns = {
-    light: [{ duration: 15, intensity: 0.4 }],
-    medium: [{ duration: 25, intensity: 0.7 }],
-    heavy: [{ duration: 35, intensity: 1 }],
+  // Map to web-haptics pattern format - can be string presets or arrays
+  const patterns: Record<string, any> = {
+    light: 'light',
+    medium: 'medium',
+    heavy: 'heavy',
     success: 'success',
     error: 'error',
     warning: 'warning',
@@ -30,5 +30,5 @@ export function trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'error'
 }
 
 export function hapticsSupported(): boolean {
-  return browser && (haptics?.isSupported ?? false);
+  return browser && haptics !== null;
 }
