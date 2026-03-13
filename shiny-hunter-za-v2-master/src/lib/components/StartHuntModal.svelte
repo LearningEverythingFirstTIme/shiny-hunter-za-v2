@@ -2,6 +2,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import type { Pokemon, HuntMethod } from '$lib/types';
 	import { HUNT_METHODS, getShinySpriteUrl } from '$lib/data/pokemon';
+	import { triggerHaptic } from '$lib/haptics';
 
 	export let pokemon: Pokemon;
 
@@ -58,10 +59,10 @@
 
 		<!-- Actions -->
 		<div class="flex gap-3">
-			<button class="btn btn-ghost flex-1" on:click={() => dispatch('close')}>Cancel</button>
+			<button class="btn btn-ghost flex-1" on:click={() => { triggerHaptic('nudge'); dispatch('close'); }}>Cancel</button>
 			<button
 				class="btn btn-primary flex-[2] font-bold"
-				on:click={() => dispatch('start', { method: selectedMethod })}
+				on:click={() => { triggerHaptic('success'); dispatch('start', { method: selectedMethod }); }}
 			>
 				🎯 Start Hunt
 			</button>

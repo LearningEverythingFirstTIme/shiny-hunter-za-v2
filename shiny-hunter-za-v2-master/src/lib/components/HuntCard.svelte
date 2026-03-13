@@ -3,6 +3,7 @@
 	import { createEventDispatcher } from 'svelte';
 	import { updateEncounters, completeHunt, abandonHunt, resumeHunt, pauseHunt, updateHuntNotes, updateHuntMethod } from '$lib/stores/hunts';
 	import { HUNT_METHODS, POKEMON, formatEVs } from '$lib/data/pokemon';
+	import { triggerHaptic } from '$lib/haptics';
 
 	export let hunt: Hunt;
 
@@ -62,6 +63,7 @@
 
 	async function onComplete() {
 		if (!hunt.id || completing) return;
+		triggerHaptic('success');
 		completing = true;
 		try {
 			await completeHunt(hunt, isAlpha);
@@ -76,6 +78,7 @@
 	async function onAbandon() {
 		if (!hunt.id || abandoning) return;
 		if (!confirm(`Abandon hunt for ${hunt.pokemonName}? This cannot be undone.`)) return;
+		triggerHaptic('error');
 		abandoning = true;
 		try {
 			await abandonHunt(hunt.id);
@@ -88,6 +91,7 @@
 
 	async function onPauseResume() {
 		if (!hunt.id || pausing) return;
+		triggerHaptic('nudge');
 		pausing = true;
 		try {
 			if (hunt.isPaused && hunt.pausedAt) {
@@ -105,6 +109,7 @@
 
 	async function onSaveNotes() {
 		if (!hunt.id || savingNotes) return;
+		triggerHaptic('nudge');
 		savingNotes = true;
 		try {
 			await updateHuntNotes(hunt.id, notes);
@@ -116,6 +121,7 @@
 
 	async function onSaveMethod() {
 		if (!hunt.id || savingMethod || selectedMethod === hunt.method) return;
+		triggerHaptic('nudge');
 		savingMethod = true;
 		try {
 			await updateHuntMethod(hunt.id, selectedMethod);
@@ -315,7 +321,7 @@
 		>+10</button>
 		<button
 			class="btn btn-secondary btn-sm font-bold increment-btn transition-all duration-200"
-			on:click={() => { showBulkAdd = !showBulkAdd; }}
+			on:click={() => { triggerHaptic('nudge'); showBulkAdd = !showBulkAdd; }}
 		>
 			{showBulkAdd ? '−' : '⋯'}
 		</button>

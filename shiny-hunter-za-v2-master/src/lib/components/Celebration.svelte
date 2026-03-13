@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount, createEventDispatcher } from 'svelte';
 	import type { Hunt } from '$lib/types';
+	import { triggerHaptic } from '$lib/haptics';
 
 	export let hunt: Hunt;
 
@@ -24,7 +25,8 @@
 	});
 
 	async function runCelebration() {
-		// 1. Screen flash
+		// 1. Screen flash + haptic burst
+		triggerHaptic('success');
 		showFlash = true;
 		await delay(600);
 		showFlash = false;
@@ -155,7 +157,7 @@
 
 			<button
 				class="btn btn-primary w-full font-bold"
-				on:click={() => dispatch('close')}
+				on:click={() => { triggerHaptic('nudge'); dispatch('close'); }}
 			>
 				🎉 Amazing! Continue
 			</button>

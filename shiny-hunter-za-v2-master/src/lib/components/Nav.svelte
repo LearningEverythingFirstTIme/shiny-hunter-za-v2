@@ -2,6 +2,7 @@
 	import { page } from '$app/stores';
 	import { user, signOut } from '$lib/stores/auth';
 	import { activeHuntsCount } from '$lib/stores/hunts';
+	import { triggerHaptic } from '$lib/haptics';
 
 	const links = [
 		{ href: '/pokedex', label: 'Pokédex', icon: '📖' },
@@ -64,7 +65,7 @@
 				<!-- svelte-ignore a11y-no-noninteractive-tabindex -->
 				<ul tabindex="0" class="menu menu-sm dropdown-content mt-2 z-[1] p-2 shadow-lg bg-base-100 rounded-box w-44 border border-base-300">
 					<li class="menu-title px-3 py-1 text-xs opacity-60">{$user.displayName ?? $user.email}</li>
-					<li><button on:click={signOut} class="text-error">Sign Out</button></li>
+					<li><button on:click={() => { triggerHaptic('nudge'); signOut(); }} class="text-error">Sign Out</button></li>
 				</ul>
 			</div>
 		{/if}

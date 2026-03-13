@@ -7,6 +7,7 @@
 	import { startHunt } from '$lib/stores/hunts';
 	import { goto } from '$app/navigation';
 	import type { Pokemon, PokemonType } from '$lib/types';
+	import { triggerHaptic } from '$lib/haptics';
 
 	let searchQuery = '';
 	let selectedType: PokemonType | '' = '';
@@ -77,7 +78,7 @@
 <p class="text-sm opacity-50 mb-4">
 	Showing {filtered.length} of {POKEMON.length} Pokémon
 	{#if selectedType || searchQuery}
-		<button class="link link-primary ml-2" on:click={() => { searchQuery = ''; selectedType = ''; }}>
+		<button class="link link-primary ml-2" on:click={() => { triggerHaptic('nudge'); searchQuery = ''; selectedType = ''; }}>
 			Clear filters
 		</button>
 	{/if}
