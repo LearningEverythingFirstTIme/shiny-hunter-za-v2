@@ -1,34 +1,33 @@
 import { browser } from '$app/environment';
-import { createWebHaptics } from 'web-haptics/svelte';
 
-let haptics: ReturnType<typeof createWebHaptics> | null = null;
+// Simple haptics using the Vibration API directly
+// This is more reliable than the web-haptics library for basic usage
 
-// Initialize haptics only on the client
-if (browser) {
-  haptics = createWebHaptics({ showSwitch: false });
+function isSupported(): boolean {
+  return browser && typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function';
 }
 
-export function trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' | 'selection' | 'nudge' = 'light') {
-  if (!browser || !haptics) return;
+export function trigger(type: 'light' | 'medium' | 'heavy' | 'success' | 'error' | 'warning' | 'selection' = 'light') {
+  if (!isSupported()) return;
   
-  // Map to web-haptics pattern format - can be string presets or arrays
-  const patterns: Record<string, any> = {
-    light: 'light',
-    medium: 'medium',
-    heavy: 'heavy',
-    success: 'success',
-    error: 'error',
-    warning: 'warning',
-    selection: 'selection',
-    nudge: 'nudge'
+  // Define vibration patterns for each type (duration in ms)
+  const patterns: Record<string, number | number[]> = {
+    light: 15,
+    medium: 25,
+    heavy: 35,
+    // Complex patterns for these
+    success: [30, 50, 40, 50],
+    error: [40, 30, 40, 30, 40, 30],
+    warning: [40, 50, 40, 50],
+    selection: 8
   };
   
   const pattern = patterns[type];
-  if (pattern) {
-    haptics.trigger(pattern);
+  if (pattern !== undefined) {
+    navigator.vibrate(pattern);
   }
 }
 
 export function hapticsSupported(): boolean {
-  return browser && haptics !== null;
+  return isSupported();
 }
